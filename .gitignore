@@ -1,0 +1,14 @@
+# Build
+.build/
+dist/
+*.icns
+icone-1024.png
+*.iconset/
+
+# macOS
+.DS_Store
+
+# Editores
+.vscode/
+.idea/
+*.swp
