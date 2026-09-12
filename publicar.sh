@@ -8,7 +8,7 @@
 #  ---
 #  bash publicar.sh            monta dist/neversleeps-<versao>.zip e cria a
 #                              release v<versao> no GitHub com o zip anexado
-#  bash publicar.sh --so-zip   so gera o zip (e o sha256 para o Homebrew)
+#  bash publicar.sh --so-zip   so gera o zip e o sha256
 #
 #  PRE-REQUISITOS
 #  --------------
@@ -55,8 +55,41 @@ echo "    sha256: $SHA"
 echo "==> Atualizando a versao no site (schema.org)"
 sed -i '' -E "s/\"softwareVersion\": \"[^\"]+\"/\"softwareVersion\": \"$VERSAO\"/" docs/index.html docs/en/index.html
 
-echo "==> Atualizando o cask do Homebrew com versao e sha256"
-sed -i '' -E "s/version \"[^\"]+\"/version \"$VERSAO\"/; s/sha256 \"[^\"]+\"/sha256 \"$SHA\"/" Casks/neversleeps.rb
+echo "==> Gerando o cask para o tap (philipecomputacao/homebrew-neversleeps)"
+CASK="$(mktemp)"
+cat > "$CASK" <<CASKEOF
+# Cask do neversleeps. Tap: philipecomputacao/neversleeps
+#
+#   brew tap philipecomputacao/neversleeps
+#   brew install --cask neversleeps
+#
+# Atualizado automaticamente pelo publicar.sh do repositorio principal a cada
+# release (versao e sha256). Nao edite a mao.
+cask "neversleeps" do
+  version "$VERSAO"
+  sha256 "$SHA"
+
+  url "https://github.com/philipecomputacao/neversleeps/releases/download/v#{version}/neversleeps-#{version}.zip"
+  name "neversleeps"
+  desc "Keeps the Mac working with the lid closed (menu bar toggle for pmset disablesleep)"
+  homepage "https://philipecomputacao.github.io/neversleeps/"
+
+  depends_on macos: ">= :sonoma"
+
+  app "neversleeps.app"
+
+  uninstall quit: "me.lpdigital.neversleeps"
+  zap trash: "~/Library/Preferences/me.lpdigital.neversleeps.plist"
+
+  caveats <<~EOS
+    O app ainda nao e notarizado pela Apple. Na primeira abertura:
+    clique com o botao direito em neversleeps.app -> Abrir (uma vez).
+
+    The app is not yet notarized by Apple. On first launch:
+    right-click neversleeps.app -> Open (once).
+  EOS
+end
+CASKEOF
 
 [ "${1:-}" = "--so-zip" ] && exit 0
 
@@ -85,6 +118,12 @@ echo "==> Criando a release v$VERSAO no GitHub"
 gh release create "v$VERSAO" "$ZIP" "${ZIP}.sha256" --title "neversleeps $VERSAO" --notes-file "$NOTAS"
 rm -f "$NOTAS"
 echo "Publicado: $(gh release view "v$VERSAO" --json url -q .url)"
-echo
-echo "Falta: commitar o cask com o sha256 novo:"
-echo "  git add Casks/neversleeps.rb && git commit -m \"chore: cask $VERSAO\" && git push"
+
+echo "==> Atualizando o cask no tap pela API"
+TAP="philipecomputacao/homebrew-neversleeps"
+SHA_ATUAL="$(gh api "repos/$TAP/contents/Casks/neversleeps.rb" --jq .sha 2>/dev/null || true)"
+gh api -X PUT "repos/$TAP/contents/Casks/neversleeps.rb" \
+  -f message="cask neversleeps $VERSAO" \
+  -f content="$(base64 < "$CASK" | tr -d '\n')" \
+  ${SHA_ATUAL:+-f sha="$SHA_ATUAL"} >/dev/null && echo "    tap atualizado: $TAP"
+rm -f "$CASK"

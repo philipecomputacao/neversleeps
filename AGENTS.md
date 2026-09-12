@@ -16,10 +16,10 @@ Swift Package (`swift build`, `swift run verificar`), sem Xcode. O `.app` é mon
 | `Recursos/` | `gerar-icone.swift`, `en.lproj/Localizable.strings` (chaves em pt-BR, tradução em inglês), `capturas/` (screenshots usados nos READMEs) |
 | `docs/` | Site (GitHub Pages, `main:/docs`): `index.html` pt-BR, `en/index.html`, `sitemap.xml`, `robots.txt`, `assets/`. Single-file, sem analytics. O `en` é gerado do pt por substituições: mudou o pt, regenere o en |
 | `construir.sh` | Ícone + `swift build -c release` (cache fora do Drive) + bundle + assinatura ad-hoc + instalação. `--sem-instalar` deixa em `dist/` |
-| `publicar.sh` | Zip com `ditto`, sha256, atualiza o cask, cria a Release no GitHub |
+| `publicar.sh` | Zip com `ditto`, sha256, cria a Release no GitHub, atualiza o cask no tap |
 | `install.sh` | Instalador de uma linha: baixa a release, confere o sha256, remove a quarentena, instala sem sudo |
 | `desinstalar.sh` | Remove o app e oferece restaurar os padrões de energia |
-| `Casks/` | Cask do Homebrew (tap pessoal) |
+| (tap) | O cask do Homebrew vive no repositório `philipecomputacao/homebrew-neversleeps`; o `publicar.sh` o atualiza pela API a cada release |
 | `versao.txt` | Único lugar da versão: script, plist, janela Sobre e release leem daqui |
 
 ## Regras que não mudam
