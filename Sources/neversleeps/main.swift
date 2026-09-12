@@ -92,6 +92,11 @@ let controlador = Controlador()
 app.delegate = controlador
 app.setActivationPolicy(.accessory)   // sem icone na Dock, sem janela principal
 #if DEBUG
+if let i = CommandLine.arguments.firstIndex(of: "--capturar"), i + 1 < CommandLine.arguments.count {
+    let pasta = CommandLine.arguments[i + 1]
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { controlador.capturarJanelas(em: pasta) }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) { print("tempo esgotado"); exit(1) }
+}
 if diagnosticoJanelas {
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
         controlador.diagnosticoJanelas()

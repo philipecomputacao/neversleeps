@@ -51,7 +51,8 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         #if DEBUG
         // No diagnostico, nada de primeira vez: menu aberto e alerta modal
         // bloqueiam o run loop e o exit(0) nunca chega.
-        if CommandLine.arguments.contains("--diagnostico-janelas") { return }
+        if CommandLine.arguments.contains("--diagnostico-janelas")
+            || CommandLine.arguments.contains("--capturar") { return }
         #endif
 
         // Primeira abertura: mostra onde o app mora, abrindo o proprio menu.
@@ -361,6 +362,63 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     #if DEBUG
+    /// `--capturar <pasta>`: renderiza as janelas do app e o menu aberto em PNG,
+    /// sem Gravacao de Tela — o macOS deixa capturar janelas do PROPRIO processo.
+    /// E como nascem os screenshots do README: pixels reais, nao mockup.
+    func capturarJanelas(em pasta: String) {
+        let dir = URL(fileURLWithPath: pasta)
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        func salvar(_ id: CGWindowID, _ nome: String) {
+            guard let img = CGWindowListCreateImage(.null, .optionIncludingWindow, id,
+                                                    [.bestResolution, .boundsIgnoreFraming]) else {
+                print("FALHA ao capturar \(nome)"); return
+            }
+            let rep = NSBitmapImageRep(cgImage: img)
+            guard let png = rep.representation(using: .png, properties: [:]) else { return }
+            let destino = dir.appendingPathComponent(nome + ".png")
+            try? png.write(to: destino)
+            print("capturado: \(destino.path) (\(img.width)x\(img.height))")
+        }
+
+        // 1. Janelas: mostra, espera pintar, captura pelo windowNumber, esconde.
+        // A janela do proprio icone da barra ("Item-0") tem windowNumber 2^32:
+        // cabe em Int, nao em CGWindowID. So janelas de verdade entram.
+        func capturavel(_ w: NSWindow) -> Bool {
+            w.isVisible && !w.title.isEmpty && !w.title.hasPrefix("Item-")
+                && w.windowNumber > 0 && w.windowNumber <= Int(UInt32.max)
+        }
+        janelaAjustes.mostrar()
+        janelaSobre.mostrar()
+        janelaAjuda.mostrar()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
+            for w in NSApp.windows.filter(capturavel) {
+                let nome = w.title.lowercased()
+                    .replacingOccurrences(of: " ", with: "-")
+                    .folding(options: .diacriticInsensitive, locale: .current)
+                salvar(CGWindowID(w.windowNumber), nome)
+                w.orderOut(nil)
+            }
+            // 2. Menu: o rastreamento do menu roda um run loop aninhado; um timer em
+            //    modo .common ainda dispara dentro dele. Captura e fecha o menu.
+            let conhecidas = Set(NSApp.windows.filter(capturavel).map { CGWindowID($0.windowNumber) })
+            let t = Timer(timeInterval: 0.8, repeats: false) { [self] _ in
+                let lista = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] ?? []
+                for w in lista {
+                    guard let pid = w[kCGWindowOwnerPID as String] as? Int32, pid == getpid(),
+                          let id = w[kCGWindowNumber as String] as? UInt32, !conhecidas.contains(id),
+                          let bounds = w[kCGWindowBounds as String] as? [String: CGFloat],
+                          (bounds["Height"] ?? 0) > 60 else { continue }
+                    salvar(id, "menu")
+                }
+                menu.cancelTracking()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { exit(0) }
+            }
+            RunLoop.main.add(t, forMode: .common)
+            item.button?.performClick(nil)
+        }
+    }
+
     func diagnosticoJanelas() {
         janelaAjustes.mostrar()
         janelaAjuda.mostrar()

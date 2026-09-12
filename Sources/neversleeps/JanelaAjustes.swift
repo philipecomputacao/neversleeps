@@ -131,7 +131,7 @@ final class JanelaAjustes: NSObject, NSWindowDelegate {
         case .minutos:
             var lista = Catalogo.presetsMinutos
             if let n = atual, n != 0, !lista.contains(n) { lista.append(n); lista.sort() }
-            return lista.map { ($0, rotuloMinutos($0)) } + [(0, "Nunca")]
+            return lista.map { ($0, rotuloMinutos($0)) } + [(0, t("Nunca"))]
         case .enumerada(let ops):
             return ops
         }
@@ -146,7 +146,7 @@ final class JanelaAjustes: NSObject, NSWindowDelegate {
         if let n = atual { p.selectItem(withTag: n) }
         p.target = self
         p.action = #selector(mudou)
-        p.widthAnchor.constraint(equalToConstant: 170).isActive = true
+        p.widthAnchor.constraint(equalToConstant: 230).isActive = true   // "Memória e Disco (padrão)" precisa caber
         return p
     }
 
