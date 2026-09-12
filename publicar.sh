@@ -74,7 +74,7 @@ cask "neversleeps" do
   desc "Keeps the Mac working with the lid closed (menu bar toggle for pmset disablesleep)"
   homepage "https://philipecomputacao.github.io/neversleeps/"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "neversleeps.app"
 
