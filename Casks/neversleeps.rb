@@ -12,7 +12,7 @@
 # direito -> Abrir" na primeira vez (o caveat abaixo avisa).
 cask "neversleeps" do
   version "1.0.0"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  sha256 "270934415cd138e9d05f8ec23c09354e9776b86374d508bc58d2f4178faad394"
 
   url "https://github.com/philipecomputacao/neversleeps/releases/download/v#{version}/neversleeps-#{version}.zip"
   name "neversleeps"
