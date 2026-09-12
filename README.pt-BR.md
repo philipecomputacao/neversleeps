@@ -7,7 +7,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-000?logo=apple)](#instalar)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
 
-**English:** [README.md](README.md)
+**Site:** [philipecomputacao.github.io/neversleeps](https://philipecomputacao.github.io/neversleeps/) · **English:** [README.md](README.md)
 
 ## Instalar
 

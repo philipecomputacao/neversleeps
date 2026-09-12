@@ -23,6 +23,7 @@ Swift Package (`swift build`, `swift test`), sem Xcode. O `.app` é montado por 
 | `desinstalar.sh` | Remove o app e oferece restaurar os padrões |
 | `Casks/` | Cask para tap pessoal |
 | `.github/workflows/build.yml` | CI: `swift test` + bundle em macOS limpo |
+| `docs/` | Landing page (GitHub Pages, `main:/docs`): `index.html` pt-BR, `en/index.html`, `sitemap.xml`, `robots.txt`, `assets/`. Single-file, sem analytics. O `en` foi gerado do pt por substituições — mudou o pt, regenere o en |
 | `versao.txt` | **Único** lugar da versão: script → plist → janela Sobre → release |
 | `specs/001-neversleeps/` | spec / plan / tasks (spec-kit) |
 

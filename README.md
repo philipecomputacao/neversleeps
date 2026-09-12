@@ -7,7 +7,7 @@
 [![macOS 14+](https://img.shields.io/badge/macOS-14%2B-000?logo=apple)](#install)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**Português:** [README.pt-BR.md](README.pt-BR.md) — *usar o Claude com o MacBook fechado, sem o Mac dormir.*
+**Site:** [philipecomputacao.github.io/neversleeps/en](https://philipecomputacao.github.io/neversleeps/en/) · **Português:** [README.pt-BR.md](README.pt-BR.md) — *usar o Claude com o MacBook fechado, sem o Mac dormir.*
 
 ## Install
 
