@@ -20,9 +20,10 @@ curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/
 <details>
 <summary>Other ways</summary>
 
-**Homebrew:**
+**Homebrew** (third-party taps must be trusted before tapping):
 
 ```bash
+brew trust philipecomputacao/neversleeps
 brew tap philipecomputacao/neversleeps
 brew install --cask neversleeps
 ```

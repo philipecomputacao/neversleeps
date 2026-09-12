@@ -6,7 +6,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 ## [Unreleased]
 
 ### Corrigido
-- Homebrew: o cask vive no tap `philipecomputacao/homebrew-neversleeps`; `brew tap philipecomputacao/neversleeps` passa a funcionar.
+- Homebrew: o cask vive no tap `philipecomputacao/homebrew-neversleeps`. Fluxo: `brew trust`, `brew tap`, `brew install --cask` (o Homebrew atual exige confiar no tap antes de tapar).
 
 ## [1.0.1], 2026-09-12
 

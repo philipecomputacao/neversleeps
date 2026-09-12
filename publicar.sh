@@ -60,6 +60,7 @@ CASK="$(mktemp)"
 cat > "$CASK" <<CASKEOF
 # Cask do neversleeps. Tap: philipecomputacao/neversleeps
 #
+#   brew trust philipecomputacao/neversleeps
 #   brew tap philipecomputacao/neversleeps
 #   brew install --cask neversleeps
 #

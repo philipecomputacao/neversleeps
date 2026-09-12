@@ -51,7 +51,8 @@ Swift Package (`swift build`, `swift run verificar`), sem Xcode. O `.app` é mon
 18. **Verifique com `swift run verificar` e `--estado`**, não com "compilou".
 19. **`--desregistrar-login` existe para o `desinstalar.sh`.** Remover o bundle sem chamá-lo deixa um Item de Início de Sessão órfão.
 20. **Screenshots nascem do próprio app** (`--capturar <pasta>`, build de debug), sem Gravação de Tela: o macOS deixa capturar janelas do próprio processo, com a moldura e a sombra nativas. A janela do item de status tem `windowNumber` 2^32 e não cabe em `CGWindowID`; o filtro `capturavel` a exclui. O menu é fotografado em rajada durante o rastreamento, porque a primeira foto sai no meio da animação.
-21. **`gh repo create --source=.` não segue o `.git` ponteiro** do `--separate-git-dir`. Crie sem `--source` e adicione o remoto à mão.
+21. **Homebrew exige `brew trust <tap>` ANTES de `brew tap`** para taps de terceiros: a validação do `tap` recusa carregar o cask de tap não confiável e devolve "invalid syntax in tap". E `depends_on macos:` recebe símbolo (`:sonoma`), não string com `>=`.
+22. **`gh repo create --source=.` não segue o `.git` ponteiro** do `--separate-git-dir`. Crie sem `--source` e adicione o remoto à mão.
 
 ## Máquina de referência
 
