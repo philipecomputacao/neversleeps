@@ -52,6 +52,9 @@ echo "$SHA  $(basename "$ZIP")" > "${ZIP}.sha256"      # o install.sh confere co
 echo "    $ZIP"
 echo "    sha256: $SHA"
 
+echo "==> Atualizando a versao no site (schema.org)"
+sed -i '' -E "s/\"softwareVersion\": \"[^\"]+\"/\"softwareVersion\": \"$VERSAO\"/" docs/index.html docs/en/index.html
+
 echo "==> Atualizando o cask do Homebrew com versao e sha256"
 sed -i '' -E "s/version \"[^\"]+\"/version \"$VERSAO\"/; s/sha256 \"[^\"]+\"/sha256 \"$SHA\"/" Casks/neversleeps.rb
 
