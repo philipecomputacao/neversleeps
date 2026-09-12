@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>neversleeps — keep your MacBook awake with the lid closed. Run Claude Code with the Mac closed.</title>
+<meta name="description" content="Free-forever menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code, builds and downloads with the Mac closed in a bag. One click, Touch ID, and a test that proves it worked. Open source, no telemetry.">
+<link rel="canonical" href="https://philipecomputacao.github.io/neversleeps/en/">
+<link rel="alternate" hreflang="pt-BR" href="https://philipecomputacao.github.io/neversleeps/">
+<link rel="alternate" hreflang="en" href="https://philipecomputacao.github.io/neversleeps/en/">
+<link rel="alternate" hreflang="x-default" href="https://philipecomputacao.github.io/neversleeps/en/">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/icone-32.png">
+<link rel="apple-touch-icon" href="../assets/icone-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="neversleeps">
+<meta property="og:title" content="neversleeps — keep your MacBook awake with the lid closed">
+<meta property="og:description" content="Run Claude Code with the Mac closed, in a bag. Free forever, open source, no telemetry.">
+<meta property="og:url" content="https://philipecomputacao.github.io/neversleeps/en/">
+<meta property="og:image" content="https://philipecomputacao.github.io/neversleeps/assets/og-en.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="neversleeps — keep your MacBook awake with the lid closed">
+<meta name="twitter:description" content="Run Claude Code with the Mac closed. Free forever, open source, no telemetry.">
+<meta name="twitter:image" content="https://philipecomputacao.github.io/neversleeps/assets/og-en.png">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "neversleeps",
+  "alternateName": "neversleeps — keep your MacBook awake with the lid closed",
+  "description": "macOS menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code or any long task with the Mac closed. One click, and a test that proves it worked.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "macOS 14 or later",
+  "softwareVersion": "1.0.0",
+  "inLanguage": ["en", "pt-BR"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
+  "license": "https://github.com/philipecomputacao/neversleeps/blob/main/LICENSE",
+  "url": "https://philipecomputacao.github.io/neversleeps/en/",
+  "downloadUrl": "https://github.com/philipecomputacao/neversleeps/releases/latest",
+  "softwareHelp": "https://github.com/philipecomputacao/neversleeps#readme",
+  "codeRepository": "https://github.com/philipecomputacao/neversleeps",
+  "screenshot": "https://philipecomputacao.github.io/neversleeps/assets/menu-en.png",
+  "author": { "@type": "Organization", "name": "LP Digital", "url": "https://lpdigital.me" },
+  "featureList": ["Lid lock with one click and Touch ID", "Real lid test that reads the system log", "Power adapter and battery side by side, one authentication", "No network, no telemetry", "Open source, MIT"]
+}
+</script>
+<style>
+:root{
+  --bg:#0a0a0c;--bg2:#141416;--card:#1b1b1e;--line:rgba(255,255,255,.09);
+  --ink:#f3f3f1;--ink2:rgba(243,243,241,.72);--ink3:rgba(243,243,241,.48);
+  --yellow:#FFD60A;--yellow-ink:#0a0a0c;
+  --serif:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --sans:"Instrument Sans",-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --radius:14px;--max:1080px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(1200px 600px at 70% -10%,rgba(255,214,10,.10),transparent 60%),radial-gradient(800px 500px at 0% 100%,rgba(255,255,255,.04),transparent 60%)}
+a{color:inherit}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+/* topo */
+.topo{display:flex;align-items:center;justify-content:space-between;padding:22px 0}
+.marca{display:flex;align-items:center;gap:12px;text-decoration:none;font-weight:600;letter-spacing:-.01em}
+.marca img{width:36px;height:36px;border-radius:9px}
+.topo nav{display:flex;gap:22px;font-size:15px;color:var(--ink2)}
+.topo nav a{text-decoration:none}
+.topo nav a:hover{color:var(--ink)}
+.lang{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:14px;text-decoration:none;color:var(--ink2)}
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:56px 0 40px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.2vw,78px);line-height:1.02;letter-spacing:-.02em;margin:0 0 20px}
+.hero h1 em{font-style:italic;color:var(--yellow)}
+.hero p.lead{font-size:20px;color:var(--ink2);max-width:52ch;margin:0 0 30px}
+.selo{display:inline-flex;align-items:center;gap:8px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--yellow);margin-bottom:18px}
+.selo:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 6px rgba(255,214,10,.14)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:12px;font-weight:600;text-decoration:none;font-size:16px;border:1px solid transparent;transition:transform .15s ease,background .15s ease}
+.btn:active{transform:scale(.98)}
+.btn-y{background:var(--yellow);color:var(--yellow-ink)}
+.btn-y:hover{background:#ffe04a}
+.btn-g{border-color:var(--line);color:var(--ink);background:rgba(255,255,255,.03)}
+.btn-g:hover{background:rgba(255,255,255,.07)}
+.cmd{margin-top:18px;display:flex;align-items:stretch;border:1px solid var(--line);border-radius:12px;background:var(--bg2);overflow:hidden;max-width:640px}
+.cmd code{flex:1;padding:14px 16px;font-family:var(--mono);font-size:13.5px;color:var(--ink2);white-space:nowrap;overflow-x:auto}
+.cmd button{border:0;border-left:1px solid var(--line);background:transparent;color:var(--ink);padding:0 16px;font:inherit;font-size:14px;cursor:pointer}
+.cmd button:hover{background:rgba(255,255,255,.06)}
+.nota{font-size:13.5px;color:var(--ink3);margin-top:10px}
+.shot{position:relative}
+.shot img{width:100%;height:auto;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line)}
+.shot figcaption{font-size:13px;color:var(--ink3);margin-top:12px;text-align:center}
+/* animacao de entrada: uma so, orquestrada */
+.rev{opacity:0;transform:translateY(14px);animation:rev .7s cubic-bezier(.2,.7,.2,1) forwards}
+.rev:nth-child(2){animation-delay:.08s}.rev:nth-child(3){animation-delay:.16s}.rev:nth-child(4){animation-delay:.24s}.rev:nth-child(5){animation-delay:.32s}
+@keyframes rev{to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.rev{animation:none;opacity:1;transform:none}}
+/* secoes */
+section{padding:64px 0}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,46px);letter-spacing:-.02em;line-height:1.08;margin:0 0 14px}
+h2 em{font-style:italic;color:var(--yellow)}
+.sub{color:var(--ink2);font-size:18px;max-width:60ch;margin:0 0 34px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.card .n{font-family:var(--serif);font-size:40px;line-height:1;color:var(--yellow);margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:18px;font-weight:600}
+.card p{margin:0;color:var(--ink2);font-size:15.5px}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.lista{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.lista li{display:grid;grid-template-columns:22px 1fr;gap:12px;color:var(--ink2)}
+.lista li b{color:var(--ink);font-weight:600}
+.lista li:before{content:"✓";color:var(--yellow);font-weight:700}
+/* gratis */
+.gratis{border:1px solid rgba(255,214,10,.35);background:linear-gradient(180deg,rgba(255,214,10,.08),rgba(255,214,10,.02));border-radius:20px;padding:44px;text-align:center}
+.gratis h2{margin-bottom:10px}
+.gratis p{color:var(--ink2);max-width:62ch;margin:0 auto 22px}
+.gratis .tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.tag{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:14px;color:var(--ink2)}
+/* faq */
+details{border-top:1px solid var(--line);padding:18px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:600;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary:after{content:"+";color:var(--ink3);font-weight:400}
+details[open] summary:after{content:"–"}
+details p{color:var(--ink2);margin:12px 0 0;max-width:70ch}
+details code{font-family:var(--mono);font-size:.92em;background:var(--bg2);padding:2px 6px;border-radius:6px}
+footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--ink3);font-size:14px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+footer a{color:var(--ink2);text-decoration:none}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:34px;padding-top:28px}.grid3{grid-template-columns:1fr}.dois{grid-template-columns:1fr}.topo nav{display:none}.gratis{padding:30px 22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topo">
+    <a class="marca" href="./"><img src="../assets/icone-180.png" alt="" width="36" height="36">neversleeps</a>
+    <nav><a href="#how">How it works</a><a href="#claude">Claude Code</a><a href="#faq">FAQ</a><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a></nav>
+    <a class="lang" href="../" hreflang="pt-BR">Português</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="selo rev">Free forever · open source</div>
+      <h1 class="rev">Your MacBook <em>stays awake</em> with the lid closed.</h1>
+      <p class="lead rev">Run Claude Code, a build, a download — any long task — with the Mac closed in a bag. One click in the menu bar, Touch ID, and a test that <strong>proves</strong> it worked.</p>
+      <div class="cta rev">
+        <a class="btn btn-y" href="https://github.com/philipecomputacao/neversleeps/releases/latest">Download for macOS</a>
+        <a class="btn btn-g" href="https://github.com/philipecomputacao/neversleeps">View the code</a>
+      </div>
+      <div class="cmd rev" role="group" aria-label="One-line install">
+        <code id="cmd">curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/install.sh | bash</code>
+        <button type="button" data-copy="cmd">Copy</button>
+      </div>
+      <p class="nota">macOS 14 or later · Apple Silicon · no <code>sudo</code> · the installer verifies the sha256 before installing</p>
+    </div>
+    <figure class="shot rev">
+      <img src="../assets/menu-en.png" width="746" height="542" alt="neversleeps menu in the macOS menu bar: the “Prevent Sleep When Lid Is Closed” lock on, tested and passed; Power Settings; Test the Lid">
+      <figcaption>The real menu: the lock line says whether it is on <em>and</em> whether it was tested.</figcaption>
+    </figure>
+  </section>
+
+  <section id="claude">
+    <h2>Use Claude Code with the <em>MacBook closed</em></h2>
+    <p class="sub">This is the situation the app exists for. Three things have to be true — and only the first is the app’s job. The other two it teaches, honestly.</p>
+    <div class="grid3">
+      <div class="card"><div class="n">1</div><h3>The Mac must not sleep when closed</h3><p>Click the cup → <b>Prevent Sleep When Lid Is Closed</b> → Touch ID. The cup fills up. That is the whole gesture.</p></div>
+      <div class="card"><div class="n">2</div><h3>It needs internet while closed</h3><p>Let the iPhone join on its own: Settings → Wi-Fi → Personal Hotspot → <b>Automatically</b>. Claude Code retries when the network comes back.</p></div>
+      <div class="card"><div class="n">3</div><h3>Heat</h3><p>A Claude Code session is light: the Mac spends its time waiting on the API. A heavy build or looping tests inside a closed pocket are not.</p></div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="dois">
+      <div>
+        <h2>On is not the same as <em>proven</em>.</h2>
+        <p class="sub">Every “keep awake” app says it is on. This is the one that closes the Mac for a minute and checks the system’s own record to see whether it slept.</p>
+        <ul class="lista">
+          <li><span><b>Real lid test.</b> Close the Mac for 1 minute, open it. The app reads <code>pmset -g log</code> and its own heartbeat, and gives the verdict: passed or failed, with time and reason.</span></li>
+          <li><span><b>Reads the system, never caches.</b> Every time the menu opens, it asks macOS. Changed something in Terminal? The menu tells the truth.</span></li>
+          <li><span><b>Re-reads after writing.</b> If macOS accepted the command and ignored the value, you are told.</span></li>
+          <li><span><b>Warns at the moment of the mistake.</b> Closed the Mac with the lock off and it slept? On opening, the app shows the record and offers to turn it on.</span></li>
+        </ul>
+      </div>
+      <figure class="shot">
+        <img src="../assets/settings-en.png" width="1566" height="1208" loading="lazy" alt="Power Settings window: power adapter and battery side by side, Apply button">
+        <figcaption>Power Settings: power adapter and battery side by side, every change with a single authentication.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="gratis">
+      <h2>Free <em>forever</em>.</h2>
+      <p>No Pro version, no subscription, no “unlock”. The code is open under the MIT license. The app uses no network, has no telemetry, does not check for updates: nothing leaves your machine. You can read every line.</p>
+      <div class="tags"><span class="tag">MIT</span><span class="tag">No telemetry</span><span class="tag">No network</span><span class="tag">No account</span><span class="tag">No sudoers</span><span class="tag">English and pt-BR</span></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <h2>FAQ</h2>
+    <details><summary>Why not <code>caffeinate</code>?</summary><p><code>caffeinate</code> prevents <em>idle</em> sleep. Closing the lid overrides it: the Mac sleeps anyway. neversleeps sets <code>pmset disablesleep</code>, the only switch that survives the lid.</p></details>
+    <details><summary>What about Amphetamine?</summary><p>It can (Closed-Display Mode), but it is one option among dozens, and nothing tells you whether it actually held. neversleeps is one toggle, and it tests itself.</p></details>
+    <details><summary>Can I do it in Terminal?</summary><p>Yes: <code>sudo pmset -a disablesleep 1</code> is exactly what the app runs. The app adds a visible state in the menu bar, one-click on/off, the real test, and a warning if you close the Mac with the lock off.</p></details>
+    <details><summary>macOS says the app is not verified. Is it safe?</summary><p>The app is signed but not yet notarized by Apple (that costs a yearly developer account). The one-line installer <b>verifies the sha256</b> published with the release before installing. Installing manually, right-click → Open, once. The code is open; you can build it yourself.</p></details>
+    <details><summary>Does it ask for a password every time?</summary><p>For every power change, yes — through macOS’s own dialog (Touch ID or password). On purpose: there is no <code>sudoers</code> rule and no helper with root left on the system. In the Settings window, several changes cost a single authentication.</p></details>
+    <details><summary>Does it get hot in a bag?</summary><p>Depends on what is running. A Claude Code session is light. Heavy compilation or looping tests, inside a closed pocket, get hot — keep the bag open in that case. The lock does not change physics.</p></details>
+    <details><summary>How do I uninstall?</summary><p><code>curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/desinstalar.sh | bash</code>. The lock is a macOS setting and does not go away with the app: the uninstaller asks whether to restore the defaults.</p></details>
+  </section>
+
+  <footer>
+    <span>neversleeps · © 2026 <a href="https://lpdigital.me">LP Digital</a> · MIT</span>
+    <span><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a> · <a href="https://github.com/philipecomputacao/neversleeps/releases/latest">Releases</a> · <a href="https://github.com/philipecomputacao/neversleeps/blob/main/SECURITY.md">Security</a> · <a href="../">Português</a></span>
+  </footer>
+</div>
+<script>
+(function(){'use strict';
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.getAttribute('data-copy')).textContent;
+      navigator.clipboard.writeText(t).then(function(){var o=b.textContent;b.textContent='Copied';setTimeout(function(){b.textContent=o;},1600);});
+    });
+  });
+})();
+</script>
+</body>
+</html>
