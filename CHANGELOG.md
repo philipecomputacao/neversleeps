@@ -5,10 +5,18 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 
 ## [Unreleased]
 
+## [1.0.1], 2026-09-12
+
 ### Adicionado
 - `install.sh`: instalação em uma linha que baixa a release, confere o sha256, remove a quarentena e instala sem `sudo`.
 - `.sha256` publicado junto do zip em cada release.
+- Site em `philipecomputacao.github.io/neversleeps` (pt-BR e inglês).
 - Templates de issue e PR, `CONTRIBUTING.md`, `SECURITY.md`.
+
+### Corrigido
+- Preset "Nunca" aparecia em português no app em inglês.
+- Popups da janela Ajustes de Energia cortavam "Memória e Disco (padrão)".
+- Legendas com vírgula ou ponto médio no lugar do travessão.
 
 ## [1.0.0], 2026-09-12
 
