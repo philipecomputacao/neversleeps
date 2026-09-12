@@ -46,7 +46,7 @@ git clone https://github.com/philipecomputacao/neversleeps.git && cd neversleeps
 
 Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app lê o log do sistema (`pmset -g log`) e o próprio batimento e mostra o veredito. Até um teste aprovar, a linha da trava diz *"Ligada · ainda não testada"* — **ligada não é a mesma coisa que provada.**
 
-<!-- screenshot: menu com a xícara, a linha da trava e o item de ajustes -->
+<p align="center"><img src="Recursos/capturas/pt-BR/menu.png" width="420" alt="Menu do neversleeps: linha da trava “Ligada · testada e aprovada”, Ajustes de Energia, Testar a Tampa"></p>
 
 ## O que ele faz
 
@@ -56,6 +56,8 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 | Saber se está ligado sem clicar | **Xícara cheia** = trava ligada · **xícara vazia** = repouso normal |
 | Ter certeza de que funciona | **Testar a Tampa…** (1 minuto, veredito real) |
 | Mudar outros ajustes de energia | **Ajustes de Energia…** (⌘,) — tomada e bateria lado a lado, uma autenticação para tudo |
+
+<p align="center"><img src="Recursos/capturas/pt-BR/ajustes.png" width="640" alt="Janela Ajustes de Energia: colunas Tomada e Bateria, botão Aplicar"></p>
 | Abrir junto com o Mac | **Abrir no Início da Sessão** |
 | Desfazer tudo | **Restaurar Padrões de Energia…** |
 

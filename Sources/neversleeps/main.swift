@@ -95,7 +95,8 @@ app.setActivationPolicy(.accessory)   // sem icone na Dock, sem janela principal
 if let i = CommandLine.arguments.firstIndex(of: "--capturar"), i + 1 < CommandLine.arguments.count {
     let pasta = CommandLine.arguments[i + 1]
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { controlador.capturarJanelas(em: pasta) }
-    DispatchQueue.main.asyncAfter(deadline: .now() + 8.0) { print("tempo esgotado"); exit(1) }
+    // Timer em .common: dispara mesmo com o menu aberto (asyncAfter nao dispararia).
+    RunLoop.main.add(Timer(timeInterval: 10.0, repeats: false) { _ in print("tempo esgotado"); exit(1) }, forMode: .common)
 }
 if diagnosticoJanelas {
     DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {

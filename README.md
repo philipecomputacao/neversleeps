@@ -46,7 +46,7 @@ This is the situation the app was built for. Three things have to be true, and o
 
 Then click **Test the Lid…**, close the Mac for one minute, open it. The app reads the system log (`pmset -g log`) and its own heartbeat and shows the verdict. Until a test passes, the lock line says *"On · not tested yet"* — **on is not the same as proven.**
 
-<!-- screenshot: menu with the cup icon, lock line and settings item -->
+<p align="center"><img src="Recursos/capturas/en/menu.png" width="420" alt="neversleeps menu: lock line reading “On · tested and passed”, Power Settings, Test the Lid"></p>
 
 ## What it does
 
@@ -56,6 +56,8 @@ Then click **Test the Lid…**, close the Mac for one minute, open it. The app r
 | Know it's on without clicking | **Full cup** = lock on · **empty cup** = normal sleep |
 | Be sure it actually works | **Test the Lid…** (1 minute, real verdict) |
 | Change other power settings | **Power Settings…** (⌘,) — power adapter and battery side by side, one authentication for all changes |
+
+<p align="center"><img src="Recursos/capturas/en/power-settings.png" width="640" alt="Power Settings window: power adapter and battery columns, Apply button"></p>
 | Start with the Mac | **Open at Login** |
 | Undo everything | **Restore Power Defaults…** |
 

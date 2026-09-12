@@ -399,20 +399,30 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 salvar(CGWindowID(w.windowNumber), nome)
                 w.orderOut(nil)
             }
-            // 2. Menu: o rastreamento do menu roda um run loop aninhado; um timer em
-            //    modo .common ainda dispara dentro dele. Captura e fecha o menu.
+            // 2. Menu: o rastreamento do menu roda um run loop aninhado (a fila
+            //    principal para; asyncAfter NAO dispara). Um Timer em modo .common
+            //    ainda dispara. Fotografa a cada 0,25 s enquanto o menu existir e
+            //    fica a ultima foto — a primeira sai no meio da animacao de abertura.
             let conhecidas = Set(NSApp.windows.filter(capturavel).map { CGWindowID($0.windowNumber) })
-            let t = Timer(timeInterval: 0.8, repeats: false) { [self] _ in
+            var ticks = 0
+            var fotos = 0
+            let t = Timer(timeInterval: 0.25, repeats: true) { [self] timer in
+                ticks += 1
                 let lista = CGWindowListCopyWindowInfo([.optionOnScreenOnly], kCGNullWindowID) as? [[String: Any]] ?? []
                 for w in lista {
                     guard let pid = w[kCGWindowOwnerPID as String] as? Int32, pid == getpid(),
                           let id = w[kCGWindowNumber as String] as? UInt32, !conhecidas.contains(id),
                           let bounds = w[kCGWindowBounds as String] as? [String: CGFloat],
                           (bounds["Height"] ?? 0) > 60 else { continue }
-                    salvar(id, "menu")
+                    salvar(id, "menu"); fotos += 1
                 }
-                menu.cancelTracking()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { exit(0) }
+                if ticks >= 8 {
+                    timer.invalidate()
+                    print(fotos > 0 ? "menu: \(fotos) fotos, ficou a ultima" : "FALHA: menu nao apareceu")
+                    menu.cancelTracking()
+                    let fim = Timer(timeInterval: 0.3, repeats: false) { _ in exit(0) }
+                    RunLoop.main.add(fim, forMode: .common)
+                }
             }
             RunLoop.main.add(t, forMode: .common)
             item.button?.performClick(nil)
