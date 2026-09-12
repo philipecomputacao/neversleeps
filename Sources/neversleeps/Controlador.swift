@@ -1,4 +1,4 @@
-// Controlador.swift — icone na barra, menu, escrita+conferencia e a orientacao
+// Controlador.swift, icone na barra, menu, escrita+conferencia e a orientacao
 // de primeira vez. O teste da tampa esta em Controlador+Teste.swift.
 import Cocoa
 import ServiceManagement
@@ -108,7 +108,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         img?.isTemplate = true
         item.button?.image = img
         item.button?.appearsDisabled = ocupado
-        item.button?.toolTip = "neversleeps — " + descricao.lowercased()
+        item.button?.toolTip = "neversleeps: " + descricao.lowercased()
     }
 
     func marcarOcupado(_ v: Bool) {
@@ -190,7 +190,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
             teste.isEnabled = false
         } else {
             let sub = Prefs.testeAprovadoEm.map {
-                tf("Aprovado %@ — %d min %d s sem repousar", Dialogos.quando($0),
+                tf("Aprovado %@ · %d min %d s sem repousar", Dialogos.quando($0),
                    Prefs.testeAprovadoDuracao / 60, Prefs.testeAprovadoDuracao % 60) }
                 ?? Prefs.testeUltimaFalha.map { tf("Reprovado: %@", $0) }
                 ?? t("Feche o Mac 1 minuto; o app confere se ele repousou")
@@ -334,7 +334,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         Prefs.boasVindasVistas = true
         let (ligar, _) = Dialogos.confirmar(
             t("O Mac ainda repousa ao fechar a tampa."),
-            t("Instalar o neversleeps não muda nada sozinho. Para trabalhar fechado, é preciso LIGAR a trava — um clique e uma autenticação. A xícara na barra de menus fica cheia.\n\nLigada, o Mac nunca repousa sozinho, mesmo fechado: não o guarde na mochila com ela ligada se estiver fazendo algo pesado.\n\nPara usar na rua, deixe o iPhone entrar sozinho como internet: Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente. O app não controla isso; a Ajuda explica."),
+            t("Instalar o neversleeps não muda nada sozinho. Para trabalhar fechado, é preciso LIGAR a trava, um clique e uma autenticação. A xícara na barra de menus fica cheia.\n\nLigada, o Mac nunca repousa sozinho, mesmo fechado: não o guarde na mochila com ela ligada se estiver fazendo algo pesado.\n\nPara usar na rua, deixe o iPhone entrar sozinho como internet: Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente. O app não controla isso; a Ajuda explica."),
             botao: t("Ligar a Trava Agora"), destrutivo: false)
         guard ligar else { return }
         Prefs.avisoTampaVisto = true       // o aviso da mochila acabou de ser dado aqui
@@ -363,7 +363,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     #if DEBUG
     /// `--capturar <pasta>`: renderiza as janelas do app e o menu aberto em PNG,
-    /// sem Gravacao de Tela — o macOS deixa capturar janelas do PROPRIO processo.
+    /// sem Gravacao de Tela, o macOS deixa capturar janelas do PROPRIO processo.
     /// E como nascem os screenshots do README: pixels reais, nao mockup.
     func capturarJanelas(em pasta: String) {
         let dir = URL(fileURLWithPath: pasta)
@@ -371,7 +371,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
         func salvar(_ id: CGWindowID, _ nome: String) {
             guard let img = CGWindowListCreateImage(.null, .optionIncludingWindow, id,
-                                                    [.bestResolution, .boundsIgnoreFraming]) else {
+                                                    [.bestResolution]) else {
                 print("FALHA ao capturar \(nome)"); return
             }
             let rep = NSBitmapImageRep(cgImage: img)
@@ -402,7 +402,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
             // 2. Menu: o rastreamento do menu roda um run loop aninhado (a fila
             //    principal para; asyncAfter NAO dispara). Um Timer em modo .common
             //    ainda dispara. Fotografa a cada 0,25 s enquanto o menu existir e
-            //    fica a ultima foto — a primeira sai no meio da animacao de abertura.
+            //    fica a ultima foto, a primeira sai no meio da animacao de abertura.
             let conhecidas = Set(NSApp.windows.filter(capturavel).map { CGWindowID($0.windowNumber) })
             var ticks = 0
             var fotos = 0

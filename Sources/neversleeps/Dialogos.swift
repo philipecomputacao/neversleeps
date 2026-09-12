@@ -1,4 +1,4 @@
-// Dialogos.swift — alertas no idioma da Apple: botao com o nome do resultado
+// Dialogos.swift, alertas no idioma da Apple: botao com o nome do resultado
 // ("Ligar", "Desligar", "Restaurar"), nunca "Continuar"; Esc no Cancelar.
 import Cocoa
 import NeversleepsCore

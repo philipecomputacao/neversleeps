@@ -1,13 +1,13 @@
 // =============================================================================
-//  JanelaAjuda.swift — a janela "Ajuda do neversleeps"
-//  LP Digital (@lpdigital.me) — projetos/neversleeps
+//  JanelaAjuda.swift, a janela "Ajuda do neversleeps"
+//  LP Digital (@lpdigital.me), projetos/neversleeps
 // =============================================================================
 //
 //  O QUE FAZ
 //  ---------
 //  Ajuda DENTRO do app, como manda o padrao: uma janela rolavel com o texto
 //  formatado, selecionavel, na fonte do sistema. Antes, "Ajuda" abria o README
-//  num editor de texto — atalho de desenvolvedor, nao ajuda de app.
+//  num editor de texto, atalho de desenvolvedor, nao ajuda de app.
 //
 //  COMO EDITAR O TEXTO
 //  -------------------
@@ -77,7 +77,7 @@ final class JanelaAjuda: NSObject {
             .passo(2, t("Teste uma vez"),
                    t("Ligada não é a mesma coisa que provada. No menu, “Testar a Tampa…”: feche o Mac por 1 minuto e abra. O app lê o registro do sistema e diz se ele repousou. A linha da trava passa a mostrar “testada e aprovada”.")),
             .passo(3, t("Abra no início da sessão"),
-                   t("Item do menu. Sem isso, depois de reiniciar não há ícone para desligar a trava — e o Mac fica sem repousar sem nenhum aviso.")),
+                   t("Item do menu. Sem isso, depois de reiniciar não há ícone para desligar a trava, e o Mac fica sem repousar sem nenhum aviso.")),
             .passo(4, t("Deixe o iPhone entrar como internet"),
                    t("Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente. Quando o Wi-Fi conhecido sumir, o Mac entra no 3G/4G do iPhone sozinho, mesmo fechado. É um ajuste do Wi-Fi: o app não o controla.")),
 
@@ -85,7 +85,7 @@ final class JanelaAjuda: NSObject {
             .paragrafo(t("Xícara vazia: repouso normal. Xícara cheia: trava ligada, o Mac não repousa ao fechar. Ampulheta: aguardando a sua autenticação. Triângulo: o app não conseguiu ler o estado de energia.")),
 
             .secao(t("O que a trava não resolve")),
-            .paragrafo(t("Calor. Uma sessão do Claude Code é leve — o Mac passa o tempo esperando a rede. Compilação pesada ou testes em loop dentro de um bolso fechado não são. Nesses casos, mochila aberta.")),
+            .paragrafo(t("Calor. Uma sessão do Claude Code é leve, o Mac passa o tempo esperando a rede. Compilação pesada ou testes em loop dentro de um bolso fechado não são. Nesses casos, mochila aberta.")),
             .paragrafo(t("Rede que cai por minutos. O Claude Code retenta quando a rede volta; uma queda longa pode derrubar a tarefa em andamento, e você retoma.")),
 
             .secao(t("Ajustes de Energia")),
@@ -93,7 +93,7 @@ final class JanelaAjuda: NSObject {
             .paragrafo(t("“Restaurar Padrões de Energia…” devolve tudo ao padrão de fábrica, inclusive a trava.")),
 
             .secao(t("Como o app sabe")),
-            .paragrafo(t("Ele nunca guarda o estado do sistema: toda vez que o menu abre, pergunta ao macOS. Toda alteração é seguida de uma releitura — se o sistema aceitou o comando e ignorou o valor, você fica sabendo. Cancelar a autenticação não é erro: nada muda e o app fica em silêncio.")),
+            .paragrafo(t("Ele nunca guarda o estado do sistema: toda vez que o menu abre, pergunta ao macOS. Toda alteração é seguida de uma releitura, se o sistema aceitou o comando e ignorou o valor, você fica sabendo. Cancelar a autenticação não é erro: nada muda e o app fica em silêncio.")),
 
             .nota("neversleeps \(versao) · LP Digital (lpdigital.me) · MIT"),
         ]

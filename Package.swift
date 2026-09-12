@@ -1,5 +1,5 @@
 // swift-tools-version:5.9
-// neversleeps — Package.swift
+// neversleeps: Package.swift
 // `swift build -c release` compila; `swift test` roda os testes do nucleo.
 // O bundle .app e montado por construir.sh a partir do binario gerado aqui.
 import PackageDescription
@@ -17,7 +17,7 @@ let package = Package(
         // Portao local sem framework de teste (XCTest/Testing exigem Xcode).
         .executableTarget(name: "verificar", dependencies: ["NeversleepsCore"],
                           path: "Sources/verificar"),
-        // Testes de verdade (Swift Testing) — rodam no CI, que tem Xcode.
+        // Testes de verdade (Swift Testing), rodam no CI, que tem Xcode.
         .testTarget(name: "NeversleepsCoreTests", dependencies: ["NeversleepsCore"],
                     path: "Tests/NeversleepsCoreTests"),
     ]

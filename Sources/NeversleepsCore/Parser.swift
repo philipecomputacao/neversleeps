@@ -1,4 +1,4 @@
-// Parser.swift — le a SAIDA do pmset, sem executar nada. Funcoes puras.
+// Parser.swift, le a SAIDA do pmset, sem executar nada. Funcoes puras.
 //
 // E aqui que moram os dois bugs que ja morderam: a chave anotada
 // ("sleep 1 (sleep prevented by ...)") e a trava que nao esta nas secoes.

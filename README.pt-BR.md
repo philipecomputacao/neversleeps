@@ -1,6 +1,6 @@
-# neversleeps — o MacBook não dorme com a tampa fechada
+# neversleeps: o MacBook não dorme com a tampa fechada
 
-**Rode o Claude Code, um build, um download ou qualquer tarefa longa do terminal com o MacBook fechado, dentro da mochila.** Um app de barra de menus para macOS que liga e desliga a trava de repouso da tampa com um clique — e depois *prova* que funcionou.
+**Rode o Claude Code, um build, um download ou qualquer tarefa longa do terminal com o MacBook fechado, dentro da mochila.** Um app de barra de menus para macOS que liga e desliga a trava de repouso da tampa com um clique, e depois *prova* que funcionou.
 
 [![Release](https://img.shields.io/github/v/release/philipecomputacao/neversleeps?label=release)](https://github.com/philipecomputacao/neversleeps/releases/latest)
 [![Build](https://github.com/philipecomputacao/neversleeps/actions/workflows/build.yml/badge.svg)](https://github.com/philipecomputacao/neversleeps/actions/workflows/build.yml)
@@ -11,7 +11,7 @@
 
 ## Instalar
 
-Uma linha — baixa a release mais recente, **confere o sha256**, instala em `/Applications` e abre. Sem `sudo`.
+Uma linha, baixa a release mais recente, **confere o sha256**, instala em `/Applications` e abre. Sem `sudo`.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/install.sh | bash
@@ -27,7 +27,7 @@ brew tap philipecomputacao/neversleeps https://github.com/philipecomputacao/neve
 brew install --cask neversleeps
 ```
 
-**Manual:** baixe o `.zip` em [Releases](https://github.com/philipecomputacao/neversleeps/releases/latest), descompacte, arraste `neversleeps.app` para Aplicativos. Na primeira abertura, **botão direito → Abrir** (uma vez) — o app ainda não é notarizado pela Apple.
+**Manual:** baixe o `.zip` em [Releases](https://github.com/philipecomputacao/neversleeps/releases/latest), descompacte, arraste `neversleeps.app` para Aplicativos. Na primeira abertura, **botão direito → Abrir** (uma vez), o app ainda não é notarizado pela Apple.
 
 **Compilando** (macOS 14+, só as Command Line Tools, sem Xcode):
 
@@ -42,9 +42,9 @@ git clone https://github.com/philipecomputacao/neversleeps.git && cd neversleeps
 
 1. **O Mac não pode repousar fechado.** Clique na xícara na barra de menus → **Impedir Repouso ao Fechar a Tampa** → Touch ID. A xícara fica cheia. É o gesto inteiro.
 2. **Precisa de internet fechado.** Deixe o iPhone entrar sozinho: *Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente*. O Claude Code retenta quando a rede volta.
-3. **Calor.** Sessão do Claude Code é leve — o Mac passa o tempo esperando a API. Build pesado ou teste em loop dentro de uma mochila fechada não é.
+3. **Calor.** Sessão do Claude Code é leve, o Mac passa o tempo esperando a API. Build pesado ou teste em loop dentro de uma mochila fechada não é.
 
-Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app lê o log do sistema (`pmset -g log`) e o próprio batimento e mostra o veredito. Até um teste aprovar, a linha da trava diz *"Ligada · ainda não testada"* — **ligada não é a mesma coisa que provada.**
+Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app lê o log do sistema (`pmset -g log`) e o próprio batimento e mostra o veredito. Até um teste aprovar, a linha da trava diz *"Ligada · ainda não testada"*, **ligada não é a mesma coisa que provada.**
 
 <p align="center"><img src="Recursos/capturas/pt-BR/menu.png" width="420" alt="Menu do neversleeps: linha da trava “Ligada · testada e aprovada”, Ajustes de Energia, Testar a Tampa"></p>
 
@@ -55,7 +55,7 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 | Trabalhar com a tampa fechada | Clique na xícara → **Impedir Repouso ao Fechar a Tampa** |
 | Saber se está ligado sem clicar | **Xícara cheia** = trava ligada · **xícara vazia** = repouso normal |
 | Ter certeza de que funciona | **Testar a Tampa…** (1 minuto, veredito real) |
-| Mudar outros ajustes de energia | **Ajustes de Energia…** (⌘,) — tomada e bateria lado a lado, uma autenticação para tudo |
+| Mudar outros ajustes de energia | **Ajustes de Energia…** (⌘,), tomada e bateria lado a lado, uma autenticação para tudo |
 
 <p align="center"><img src="Recursos/capturas/pt-BR/ajustes.png" width="640" alt="Janela Ajustes de Energia: colunas Tomada e Bateria, botão Aplicar"></p>
 | Abrir junto com o Mac | **Abrir no Início da Sessão** |
@@ -63,13 +63,13 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 
 ## Por que não `caffeinate` ou Amphetamine?
 
-- `caffeinate` impede o repouso por *ociosidade*. Fechar a tampa passa por cima — o Mac dorme do mesmo jeito. O neversleeps grava `pmset disablesleep`, o único interruptor que sobrevive à tampa.
+- `caffeinate` impede o repouso por *ociosidade*. Fechar a tampa passa por cima, o Mac dorme do mesmo jeito. O neversleeps grava `pmset disablesleep`, o único interruptor que sobrevive à tampa.
 - O Amphetamine consegue (Closed-Display Mode), mas é uma opção entre dezenas, e nada diz se segurou de verdade. O neversleeps é um interruptor só, e se testa.
-- `sudo pmset -a disablesleep 1` no Terminal funciona — é exatamente o que o app roda. O app acrescenta: estado visível na barra de menus, liga/desliga com um clique, teste real, e um aviso se você fechar o Mac com a trava desligada.
+- `sudo pmset -a disablesleep 1` no Terminal funciona, é exatamente o que o app roda. O app acrescenta: estado visível na barra de menus, liga/desliga com um clique, teste real, e um aviso se você fechar o Mac com a trava desligada.
 
 ## Como funciona
 
-- **Lê o estado real** com `pmset -g`, `pmset -g custom` e `pmset -g batt` toda vez que o menu abre. Nunca guarda — mude algo no Terminal e o menu conta a verdade.
+- **Lê o estado real** com `pmset -g`, `pmset -g custom` e `pmset -g batt` toda vez que o menu abre. Nunca guarda, mude algo no Terminal e o menu conta a verdade.
 - **Escreve** com `pmset` como root pelo **diálogo de autenticação do próprio macOS** (Touch ID / senha), uma autenticação por mudança. Sem regra de `sudoers`, sem helper privilegiado, nada com root pendurado.
 - **Relê depois de toda escrita.** Se o macOS aceitou o comando mas ignorou o valor, você fica sabendo.
 - **Sem rede. Sem telemetria.** Nada sai da sua máquina. ([SECURITY.md](SECURITY.md))
@@ -95,6 +95,6 @@ Testado em Apple Silicon, macOS 26. Exige macOS 14+.
 
 ## Licença
 
-[MIT](LICENSE) — © 2026 LP Digital ([lpdigital.me](https://lpdigital.me))
+[MIT](LICENSE) · © 2026 LP Digital ([lpdigital.me](https://lpdigital.me))
 
 <sub>Palavras-chave: MacBook fechado não dormir · usar Claude Code com o notebook fechado · macOS impedir repouso tampa fechada · pmset disablesleep barra de menus · alternativa ao caffeinate · keep MacBook awake lid closed</sub>

@@ -1,4 +1,4 @@
-// Sistema.swift — executa o pmset e entrega o Estado. A fonte de verdade.
+// Sistema.swift, executa o pmset e entrega o Estado. A fonte de verdade.
 // Nada aqui e cacheado; quem quer o estado, pergunta ao sistema.
 import Foundation
 

@@ -1,4 +1,4 @@
-// Privilegio.swift — escrita como root pelo dialogo de autenticacao do macOS.
+// Privilegio.swift, escrita como root pelo dialogo de autenticacao do macOS.
 import Cocoa
 import NeversleepsCore
 
@@ -12,7 +12,7 @@ enum Privilegio {
 
     /// Roda um comando como root pelo dialogo de autenticacao do macOS.
     /// Executa DENTRO do processo (NSAppleScript), por isso o dialogo diz
-    /// "neversleeps deseja fazer alteracoes" e mostra o icone do app — com
+    /// "neversleeps deseja fazer alteracoes" e mostra o icone do app, com
     /// `osascript` em subprocesso ele diria "osascript", com icone generico.
     /// O texto do comando vem do catalogo e de inteiros, nunca de entrada livre.
     static func rodar(_ comando: String) -> Resultado {

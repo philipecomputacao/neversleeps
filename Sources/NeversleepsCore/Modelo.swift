@@ -1,4 +1,4 @@
-// Modelo.swift — o vocabulario do app: ajustes, escritas, estado do sistema.
+// Modelo.swift, o vocabulario do app: ajustes, escritas, estado do sistema.
 // Sem AppKit. Tudo aqui e testavel com `swift test`.
 import Foundation
 
@@ -59,7 +59,7 @@ public struct Repouso: Equatable {
 
     public var descricao: String {
         let hora = DateFormatter.localizedString(from: quando, dateStyle: .none, timeStyle: .short)
-        return "\(hora) — \(motivo)"
+        return "\(hora), \(motivo)"
     }
 }
 
@@ -169,7 +169,7 @@ public enum Catalogo {
                escopo: .porFonte, simbolo: "archivebox")
     ] }
 
-    /// Chaves do catalogo — usadas pelo parser para saber onde esta o valor.
+    /// Chaves do catalogo, usadas pelo parser para saber onde esta o valor.
     public static let chavesConhecidas: Set<String> = [
         "sleep", "displaysleep", "disksleep", "powernap", "standby", "womp",
         "tcpkeepalive", "ttyskeepawake", "lowpowermode", "lessbright", "hibernatemode"

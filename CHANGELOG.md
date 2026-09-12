@@ -10,7 +10,7 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 - `.sha256` publicado junto do zip em cada release.
 - Templates de issue e PR, `CONTRIBUTING.md`, `SECURITY.md`.
 
-## [1.0.0] — 2026-09-12
+## [1.0.0], 2026-09-12
 
 ### Adicionado
 - Ícone na barra de menus com a trava da tampa (`pmset disablesleep`): xícara vazia = repouso normal, cheia = trava ligada.

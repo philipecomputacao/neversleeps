@@ -1,7 +1,7 @@
 #!/bin/bash
 # =============================================================================
-#  publicar.sh — gera o zip da versao e publica a Release no GitHub
-#  LP Digital (@lpdigital.me) — MIT
+#  publicar.sh, gera o zip da versao e publica a Release no GitHub
+#  LP Digital (@lpdigital.me), MIT
 # =============================================================================
 #
 #  USO

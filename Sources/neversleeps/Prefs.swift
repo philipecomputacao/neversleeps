@@ -1,4 +1,4 @@
-// Prefs.swift — SO preferencia do app. O estado do sistema nunca e guardado aqui.
+// Prefs.swift, SO preferencia do app. O estado do sistema nunca e guardado aqui.
 import Foundation
 
 enum Prefs {

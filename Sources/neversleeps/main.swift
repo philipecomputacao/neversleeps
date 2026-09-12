@@ -1,6 +1,6 @@
 // =============================================================================
-//  neversleeps — mantem o Mac trabalhando com a tampa fechada
-//  LP Digital (@lpdigital.me) — MIT
+//  neversleeps: mantem o Mac trabalhando com a tampa fechada
+//  LP Digital (@lpdigital.me), MIT
 // =============================================================================
 //
 //  MAPA DO CODIGO
@@ -53,9 +53,9 @@ if CommandLine.arguments.contains("--estado") {
     print("")
     print("  chave            tomada  bateria  titulo")
     for a in Catalogo.ajustes {
-        let t = e.tomada[a.chave].map(String.init) ?? "—"
-        let b = e.bateria[a.chave].map(String.init) ?? "—"
-        if t == "—" && b == "—" { continue }
+        let t = e.tomada[a.chave].map(String.init) ?? "-"
+        let b = e.bateria[a.chave].map(String.init) ?? "-"
+        if t == "-" && b == "-" { continue }
         print("  \(a.chave.padding(toLength: 16, withPad: " ", startingAt: 0)) \(t.padding(toLength: 7, withPad: " ", startingAt: 0)) \(b.padding(toLength: 8, withPad: " ", startingAt: 0)) \(a.titulo)")
     }
     exit(0)

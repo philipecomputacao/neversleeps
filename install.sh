@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-#  neversleeps — instalador de uma linha / one-line installer
+#  neversleeps: instalador de uma linha / one-line installer
 #
 #    curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/install.sh | bash
 #

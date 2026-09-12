@@ -1,4 +1,4 @@
-// Controlador+Teste.swift — o teste da tampa: a prova de que a trava funciona.
+// Controlador+Teste.swift, o teste da tampa: a prova de que a trava funciona.
 //
 // Duas testemunhas independentes, e as duas precisam concordar:
 //   1. o log do proprio macOS (`pmset -g log`): qualquer "Entering Sleep" a

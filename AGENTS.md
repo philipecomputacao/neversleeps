@@ -1,115 +1,58 @@
-# AGENTS.md — neversleeps
+# Notas de manutenção
 
-Porta de entrada para IAs. **Leia antes de tocar em qualquer arquivo.**
-
-## O que é
-
-App de barra de menus (Swift + AppKit) que liga/desliga `pmset disablesleep` e outras
-variáveis de energia do macOS. Uso pessoal, local, não distribuído.
+Leia antes de mexer. Cada item abaixo custou um bug real.
 
 ## Estrutura
 
-Swift Package (`swift build`, `swift test`), sem Xcode. O `.app` é montado por script.
+Swift Package (`swift build`, `swift run verificar`), sem Xcode. O `.app` é montado por script.
 
 | Caminho | O que é |
 |---|---|
 | `Package.swift` | Dois alvos + testes. Tools 5.9 (modo Swift 5), macOS 14+ |
-| `Sources/NeversleepsCore/` | Núcleo **sem AppKit**, testável: `Modelo` (ajustes, escritas, estado, catálogo), `Parser` (lê a saída do pmset, funções puras), `Sistema` (executa o pmset), `Localizacao` (`t()`/`tf()`) |
-| `Sources/neversleeps/` | O app: `main` (CLI + partida), `Controlador` (ícone, menu, orientação), `Controlador+Teste` (teste da tampa), `Privilegio`, `Prefs`, `Dialogos`, `JanelaAjustes`, `JanelaAjuda`, `JanelaSobre` |
-| `Tests/NeversleepsCoreTests/` | Swift Testing. `Fixtures.swift` tem saídas **reais** do pmset desta máquina |
-| `Recursos/` | `gerar-icone.swift` e `en.lproj/Localizable.strings` (chaves em pt-BR → inglês) |
+| `Sources/NeversleepsCore/` | Núcleo sem AppKit, testável: `Modelo` (ajustes, escritas, estado, catálogo), `Parser` (lê a saída do pmset, funções puras), `Sistema` (executa o pmset), `Localizacao` (`t()`/`tf()`), `Amostras` (saídas reais do pmset) |
+| `Sources/neversleeps/` | O app: `main` (linha de comando e partida), `Controlador` (ícone, menu, orientação de primeira vez), `Controlador+Teste` (teste da tampa), `Privilegio`, `Prefs`, `Dialogos`, `JanelaAjustes`, `JanelaAjuda`, `JanelaSobre` |
+| `Sources/verificar/` | As checagens do núcleo sem framework de teste. Portão do `construir.sh` |
+| `Tests/NeversleepsCoreTests/` | Swift Testing. Roda no CI (exige Xcode) |
+| `Recursos/` | `gerar-icone.swift`, `en.lproj/Localizable.strings` (chaves em pt-BR, tradução em inglês), `capturas/` (screenshots usados nos READMEs) |
+| `docs/` | Site (GitHub Pages, `main:/docs`): `index.html` pt-BR, `en/index.html`, `sitemap.xml`, `robots.txt`, `assets/`. Single-file, sem analytics. O `en` é gerado do pt por substituições: mudou o pt, regenere o en |
 | `construir.sh` | Ícone + `swift build -c release` (cache fora do Drive) + bundle + assinatura ad-hoc + instalação. `--sem-instalar` deixa em `dist/` |
 | `publicar.sh` | Zip com `ditto`, sha256, atualiza o cask, cria a Release no GitHub |
-| `desinstalar.sh` | Remove o app e oferece restaurar os padrões |
-| `Casks/` | Cask para tap pessoal |
-| `.github/workflows/build.yml` | CI: `swift test` + bundle em macOS limpo |
-| `docs/` | Landing page (GitHub Pages, `main:/docs`): `index.html` pt-BR, `en/index.html`, `sitemap.xml`, `robots.txt`, `assets/`. Single-file, sem analytics. O `en` foi gerado do pt por substituições — mudou o pt, regenere o en |
-| `versao.txt` | **Único** lugar da versão: script → plist → janela Sobre → release |
-| `specs/001-neversleeps/` | spec / plan / tasks (spec-kit) |
+| `install.sh` | Instalador de uma linha: baixa a release, confere o sha256, remove a quarentena, instala sem sudo |
+| `desinstalar.sh` | Remove o app e oferece restaurar os padrões de energia |
+| `Casks/` | Cask do Homebrew (tap pessoal) |
+| `versao.txt` | Único lugar da versão: script, plist, janela Sobre e release leem daqui |
 
-## Gotchas fatais
+## Regras que não mudam
 
-1. **Nunca cachear o estado do sistema.** A fonte de verdade é o `pmset`, relido em
-   `menuWillOpen`, num timer de 30 s e ao despertar. Um cache faz o ícone mentir quando
-   o usuário mexe pelo Terminal. Isso é requisito (FR-003), não estilo.
-2. **Toda escrita exige releitura de conferência de TODAS as fontes alvo.** O macOS
-   aceita e ignora algumas escritas em silêncio. Sem o `recarregar()` + `conferir` em
-   `executarPrivilegiado`, o app vira um interruptor decorativo.
-3. **`pmset -g cap` ignora `-a/-b/-c`** e sempre reporta a fonte do cabo. Por isso a
-   lista de variáveis vem das seções de `pmset -g custom` (`Estado.tomada` /
-   `Estado.bateria`), nunca do `cap`. Uma chave ausente na fonte alvo não vira item.
-4. **Cancelar autenticação devolve `-128`** em `NSAppleScript.errorNumber` e é tratado
-   como `.cancelado`. Não transforme em erro na tela — cancelar é uso normal.
-   A escrita usa `NSAppleScript` **dentro do processo** de propósito: é o que faz o
-   diálogo dizer "neversleeps deseja fazer alterações". Trocar por `osascript` em
-   subprocesso faz o diálogo dizer "osascript" com ícone genérico.
-5. **`disablesleep` é global**, não aceita `-b`/`-c` de forma significativa. Fica com
-   `escopo: .sistema` e sempre usa `-a`.
-6. **Depois de mudar qualquer `Sources/**/*.swift`, rode `bash construir.sh`.** O cache do
-   SwiftPM fica em `~/Library/Caches/neversleeps-build`, nunca em `.build/` dentro do Drive. O script mata o processo
-   antigo antes de copiar; sem isso o macOS mantém a versão velha viva e você jura que
-   o build não pegou.
-7. **Verifique com `swift test` e `--estado`**, não com "compilou":
-   `/Applications/neversleeps.app/Contents/MacOS/neversleeps --estado`
-8. **Símbolo SF inexistente vira ícone em branco, sem erro.** Ao acrescentar um,
-   confirme que `NSImage(systemSymbolName:)` não devolve `nil` nesta versão do macOS.
-9. **Vocabulário é o do macOS em pt-BR**: "repouso", "Modo Pouca Energia", "Despertar
-   para Acesso de Rede", "Abrir no Início da Sessão", "Encerrar". Title Case nos itens,
-   sentence case nos subtítulos. Botões de alerta nomeiam o resultado ("Ligar",
-   "Desligar", "Restaurar"), nunca "Continuar". Sem emoji.
-10. **Não use sol/lua na barra**: `sun.max` é o glifo de brilho e `moon` é o de Foco,
-    que fica ao lado. O par é `cup.and.saucer` → `cup.and.saucer.fill`.
-11. **`--desregistrar-login` existe para o `desinstalar.sh`.** Remover o bundle sem
-    chamá-lo deixa um Item de Início de Sessão órfão.
-12. **Não existe seletor de modo, e não deve voltar a existir.** O usuário real não
-    entendeu "Aplicar em" (uma escolha global mudando o significado de todos os itens).
-    Cada item carrega o próprio escopo: booleanos com 4 estados (Sempre / Só na Tomada /
-    Só na Bateria / Nunca), minutos e enumerados com três seções nomeadas. A `Escrita`
-    viaja inteira no `representedObject` ("chave|t|b") — não há estado escondido entre
-    abrir o menu e clicar. O cabeçalho mostra `Estado.emUso` (`pmset -g batt`).
-13. **O menu principal é a trava e só.** O painel de energia vive atrás de "Mais Ajustes
-    de Energia ›". O uso real é "fechar o Mac na mochila com o Claude rodando"; tudo
-    que competir com a primeira linha por atenção é regressão.
-14. **O menu é o app, não um tutorial.** O usuário rejeitou o checklist ("não é assim
-    que fazemos apps") e depois a seção "próximo passo" ("não é elegante"). Regra: no
-    menu só ESTADO e AÇÕES comuns. Orientação acontece uma vez, em diálogos de
-    primeira vez (`mostrarBoasVindas`, oferta de teste ao ligar a trava, aviso
-    pós-repouso). O hotspot do iPhone **saiu do app** (não é legível) e vive na Ajuda.
-    A legenda da trava diz "ainda não testada" até um teste aprovar.
-18. **Ajustes finos vivem numa janela, não no menu.** Menu fecha a cada escolha e cada
-    escolha pedia Touch ID. `JanelaAjustes` aplica N mudanças com UM comando (`&&`) e
-    UMA autenticação, relê o sistema e marca em vermelho o que foi recusado. Não
-    recrie submenus de configuração no menu.
-19. **Ajuda é janela do app, não arquivo aberto no editor.** O usuário rejeitou o README
-    abrindo no TextEdit ("não está profissional"). O README não vai mais no bundle.
-20. **Janela de app sem Dock abre ATRÁS.** `NSApp.activate()` sem `ignoringOtherApps`
-    é negado pela ativação cooperativa do macOS 14+; o usuário viu "nada abriu". Toda
-    janela usa `activate(ignoringOtherApps: true)` + `orderFrontRegardless()`. Prova sem
-    clicar: `neversleeps --diagnostico-janelas` imprime frame e visibilidade.
-15. **Instalar não liga nada, e o usuário real assumiu que ligava.** Fechou a tampa sem
-    clicar em nada e o Mac repousou (log 09:09 `Clamshell Sleep`, `SleepDisabled 0`).
-    Por isso existem `mostrarBoasVindas()` (trava desligada e nunca testada) e
-    `despertouDoRepouso()` (ao despertar, se houve `Clamshell` nos últimos 15 min com a
-    trava desligada). Os dois levam direto ao Touch ID. Não remova nem enfraqueça.
-16. **`disablesleep` não está nas seções tomada/bateria.** Ela é global (`SleepDisabled`
-    em `pmset -g`). `Estado.confere` e `Estado.encontrado` têm caso especial para ela.
-    Sem isso, a conferência diz "não aplicou" para uma escrita que deu certo — foi
-    exatamente o alerta falso que o usuário viu em 12/09.
-17. **App Nap freia o batimento do teste.** Primeiro teste real: 19 s de pausa num limite
-    de 20 s, com o log provando que não houve repouso. `iniciarTeste` chama
-    `beginActivity(.userInitiated)` e `encerrarTeste` fecha; limite 30 s. O log do
-    `pmset` é a testemunha principal; o batimento é a segunda.
+1. **Privilégio só pelo diálogo do macOS**, a cada alteração (`NSAppleScript` dentro do processo, para o diálogo levar o nome e o ícone do app). Nunca `sudoers`, nunca helper com root.
+2. **O menu é o app.** Só estado e ações. Nada de checklist, tutorial ou "próximo passo" no menu. Orientação acontece uma vez, em diálogos de primeira vez. Ajustes finos vivem numa janela.
+3. **Sem rede, sem telemetria.** Nem no app, nem no site.
+4. **Sem travessão** em texto, código, commits ou site.
+
+## Armadilhas do código
+
+1. **Nunca cachear o estado do sistema.** A fonte de verdade é o `pmset`, relido em `menuWillOpen`, num timer de 30 s e ao despertar. Um cache faz o ícone mentir quando alguém mexe pelo Terminal.
+2. **Toda escrita exige releitura de conferência** de todas as fontes que ela tocou. O macOS aceita e ignora algumas escritas em silêncio; sem o `recarregar()` + conferência em `executarPrivilegiado`, o app vira interruptor decorativo.
+3. **`disablesleep` é global.** Vive em `SleepDisabled` no `pmset -g`, não nas seções tomada/bateria. `Estado.confere` e `Estado.encontrado` têm caso especial; sem ele a conferência acusa "não aplicou" numa escrita que deu certo.
+4. **`pmset -g cap` ignora `-a/-b/-c`** e reporta sempre a fonte do cabo. A lista de variáveis vem das seções de `pmset -g custom`. Chave ausente numa fonte não vira controle.
+5. **Cancelar a autenticação devolve `-128`** em `NSAppleScript.errorNumber`. É uso normal, não erro: o app fica calado.
+6. **Janela de app sem Dock abre atrás** da janela da frente. Toda janela usa `activate(ignoringOtherApps: true)` + `orderFrontRegardless()`. Prova sem clicar: build de debug com `--diagnostico-janelas`.
+7. **App Nap freia timers com a tela apagada.** O teste da tampa declara `beginActivity(.userInitiated)`; sem isso a pausa do batimento passa de 19 s e reprova um teste que o log aprovou. Limite: 30 s. O log do `pmset` é a testemunha principal; o batimento, a segunda.
+8. **Fechar a tampa com a trava ligada não gera "Display is turned off" no log.** Não dependa disso para detectar a tampa.
+9. **`XCTest` e `Testing` não existem nas Command Line Tools.** Testes rodam no CI (`macos-15`; o `macos-14` tem Swift 5.10, sem Swift Testing). Localmente, `swift run verificar`.
+10. **Sem Developer ID: assinatura ad-hoc.** Sparkle não funciona com ad-hoc (a assinatura muda a cada build e ele recusa a atualização). O caminho da notarização está em `publicar.sh`.
+11. **Localização: a chave é o texto em pt-BR.** Todo texto de interface passa por `t()` ou `tf()`; a tradução vive em `Recursos/en.lproj/Localizable.strings`. Texto novo sem entrada aparece em português no sistema em inglês. Conferir antes de publicar: extraia as chaves com `grep -o 't("[^"]*"'` e compare.
+12. **Símbolo SF inexistente vira ícone em branco**, sem erro. Ao acrescentar um, confirme que `NSImage(systemSymbolName:)` não devolve `nil`.
+13. **Não use sol/lua na barra.** `sun.max` é o glifo de brilho e `moon` é o de Foco, vizinhos na mesma barra. O par é `cup.and.saucer` e `cup.and.saucer.fill`.
+14. **Vocabulário é o do macOS em pt-BR:** "repouso", "Modo Pouca Energia", "Despertar para Acesso de Rede", "Abrir no Início da Sessão", "Encerrar". Title Case nos itens, sentence case nos subtítulos. Botões de alerta nomeiam o resultado ("Ligar", "Desligar", "Restaurar"), nunca "Continuar". Sem emoji.
+15. **Ligada não é funcionando.** A legenda da trava diz "ainda não testada" até um teste aprovar. O hotspot do iPhone não é legível pelo app e por isso não está no menu: vive na Ajuda.
+16. **Instalar não liga nada.** Ao abrir com a trava desligada e nunca testada, o app diz isso e oferece ligar. Ao despertar de um `Clamshell Sleep` com a trava desligada, avisa com o registro do log. Não remova nem enfraqueça.
+17. **Depois de mudar qualquer `Sources/**/*.swift`, rode `bash construir.sh`.** O cache do SwiftPM fica em `~/Library/Caches/neversleeps-build`, nunca em `.build/` dentro do Drive. O script mata o processo antigo e espera; sem isso o macOS mantém a versão velha viva.
+18. **Verifique com `swift run verificar` e `--estado`**, não com "compilou".
+19. **`--desregistrar-login` existe para o `desinstalar.sh`.** Remover o bundle sem chamá-lo deixa um Item de Início de Sessão órfão.
+20. **Screenshots nascem do próprio app** (`--capturar <pasta>`, build de debug), sem Gravação de Tela: o macOS deixa capturar janelas do próprio processo, com a moldura e a sombra nativas. A janela do item de status tem `windowNumber` 2^32 e não cabe em `CGWindowID`; o filtro `capturavel` a exclui. O menu é fotografado em rajada durante o rastreamento, porque a primeira foto sai no meio da animação.
+21. **`gh repo create --source=.` não segue o `.git` ponteiro** do `--separate-git-dir`. Crie sem `--source` e adicione o remoto à mão.
 
 ## Máquina de referência
 
-MacBookPro17,1 (M1), macOS 26.2. `hibernatemode` é gravável aqui. `lessbright` só
-existe na bateria.
-21. **Localização: a chave É o texto em pt-BR.** Todo texto de interface passa por `t("…")`
-    ou `tf("… %@ …", args)`. A tradução vive em `Recursos/en.lproj/Localizable.strings`.
-    Texto novo sem entrada no `.strings` aparece em português no sistema em inglês —
-    rode a extração (`grep -o 't("[^"]*"'`) e compare antes de publicar.
-22. **`XCTest` não existe nas Command Line Tools.** Os testes usam Swift Testing
-    (`import Testing`, `@Test`, `#expect`). Não converta de volta.
-23. **Sem Developer ID: ad-hoc + "botão direito → Abrir".** Sparkle NÃO funciona com
-    assinatura ad-hoc (a assinatura muda a cada build e ele recusa a atualização).
-    O caminho para notarização está documentado em `publicar.sh`.
+MacBookPro17,1 (M1), macOS 26.2. `hibernatemode` é gravável aqui. `lessbright` só existe na bateria. `womp` vem 1 na tomada e 0 na bateria.

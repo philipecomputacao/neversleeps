@@ -2,9 +2,9 @@
 
 ## O que o app faz com privilégio / What the app does with privilege
 
-Toda escrita é `pmset` como root, obtida pelo diálogo de autenticação do próprio macOS a cada alteração. O comando é montado a partir de um catálogo fixo de chaves e de inteiros — nunca de entrada livre. Não há regra de `sudoers`, não há helper privilegiado, nada com root fica no sistema depois do clique.
+Toda escrita é `pmset` como root, obtida pelo diálogo de autenticação do próprio macOS a cada alteração. O comando é montado a partir de um catálogo fixo de chaves e de inteiros, nunca de entrada livre. Não há regra de `sudoers`, não há helper privilegiado, nada com root fica no sistema depois do clique.
 
-Every write is `pmset` as root, obtained through macOS's own authentication dialog on each change. The command is built from a fixed catalog of keys and integers — never from free input. No `sudoers` rule, no privileged helper, nothing with root remains on the system after the click.
+Every write is `pmset` as root, obtained through macOS's own authentication dialog on each change. The command is built from a fixed catalog of keys and integers, never from free input. No `sudoers` rule, no privileged helper, nothing with root remains on the system after the click.
 
 ## Rede / Network
 

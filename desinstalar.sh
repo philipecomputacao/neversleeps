@@ -1,7 +1,7 @@
 #!/bin/bash
 # =============================================================================
-#  desinstalar.sh — remove o neversleeps e devolve o sistema ao padrao
-#  LP Digital (@lpdigital.me) — projetos/neversleeps
+#  desinstalar.sh, remove o neversleeps e devolve o sistema ao padrao
+#  LP Digital (@lpdigital.me), projetos/neversleeps
 # =============================================================================
 #
 #  O QUE FAZ

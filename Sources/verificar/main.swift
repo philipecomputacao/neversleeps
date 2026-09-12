@@ -1,4 +1,4 @@
-// verificar — as checagens do nucleo SEM framework de teste, para rodar em
+// verificar, as checagens do nucleo SEM framework de teste, para rodar em
 // qualquer Mac so com as Command Line Tools (XCTest e Testing exigem Xcode).
 // E o mesmo conjunto de Tests/NeversleepsCoreTests, em forma de portao:
 // `swift run verificar` sai com 1 se algo falhar. O construir.sh chama isto.

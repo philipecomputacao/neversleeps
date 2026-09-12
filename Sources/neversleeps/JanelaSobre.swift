@@ -1,4 +1,4 @@
-// JanelaSobre.swift — a janela "Sobre": versao, licenca, links e a promessa
+// JanelaSobre.swift, a janela "Sobre": versao, licenca, links e a promessa
 // que vale ouro num app de energia: sem rede, sem telemetria.
 import Cocoa
 import NeversleepsCore
@@ -23,7 +23,7 @@ final class JanelaSobre: NSObject {
 
     private func montar() {
         let info = Bundle.main.infoDictionary ?? [:]
-        let versao = info["CFBundleShortVersionString"] as? String ?? "—"
+        let versao = info["CFBundleShortVersionString"] as? String ?? "-"
 
         let icone = NSImageView(image: NSApp.applicationIconImage)
         icone.imageScaling = .scaleProportionallyUpOrDown

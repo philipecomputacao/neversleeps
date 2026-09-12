@@ -5,8 +5,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Cole a saída de diagnóstico — ela diz exatamente o que o app leu do sistema.
-        Paste the diagnostic output — it says exactly what the app read from the system.
+        Cole a saída de diagnóstico, ela diz exatamente o que o app leu do sistema.
+        Paste the diagnostic output, it says exactly what the app read from the system.
         ```bash
         /Applications/neversleeps.app/Contents/MacOS/neversleeps --estado
         sw_vers -productVersion; uname -m

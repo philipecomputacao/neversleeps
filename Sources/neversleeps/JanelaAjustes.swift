@@ -1,6 +1,6 @@
 // =============================================================================
-//  JanelaAjustes.swift — a janela "Ajustes de Energia" do neversleeps
-//  LP Digital (@lpdigital.me) — projetos/neversleeps
+//  JanelaAjustes.swift, a janela "Ajustes de Energia" do neversleeps
+//  LP Digital (@lpdigital.me), projetos/neversleeps
 // =============================================================================
 //
 //  O QUE FAZ
@@ -8,7 +8,7 @@
 //  A janela onde se configura tomada e bateria LADO A LADO, mexendo em quantos
 //  ajustes quiser e aplicando tudo com UMA autenticacao. E o padrao dos apps de
 //  barra de menus: o menu e para o gesto rapido (a trava); a janela e para
-//  configurar. Menu do macOS fecha a cada escolha, e cada escolha pedia Touch ID —
+//  configurar. Menu do macOS fecha a cada escolha, e cada escolha pedia Touch ID,
 //  configurar dez coisas custava dez autenticacoes. Aqui custa uma.
 //
 //  COMO FUNCIONA
@@ -32,7 +32,7 @@
 //    um NSStackView. Para acrescentar uma coluna ou linha, mexa em `montar()`.
 //  - `isReleasedWhenClosed = false`: a janela e reaproveitada; fechar so esconde.
 //  - A escrita e sincrona na thread principal (NSAppleScript). Enquanto o dialogo
-//    de senha esta aberto, a janela nao responde — o rodape avisa antes.
+//    de senha esta aberto, a janela nao responde, o rodape avisa antes.
 // =============================================================================
 
 import Cocoa
@@ -183,7 +183,7 @@ final class JanelaAjustes: NSObject, NSWindowDelegate {
     }
 
     private func tracinho() -> NSView {
-        let l = NSTextField(labelWithString: "—")
+        let l = NSTextField(labelWithString: "-")
         l.textColor = .tertiaryLabelColor
         l.alignment = .center
         return l
@@ -215,8 +215,8 @@ final class JanelaAjustes: NSObject, NSWindowDelegate {
         } else if n == 0 {
             status.stringValue = t("Nenhuma alteração pendente.")
         } else {
-            status.stringValue = n == 1 ? t("1 alteração pendente — uma autenticação para aplicar.")
-                                        : tf("%d alterações pendentes — uma autenticação para aplicar todas.", n)
+            status.stringValue = n == 1 ? t("1 alteração pendente, uma autenticação para aplicar.")
+                                        : tf("%d alterações pendentes, uma autenticação para aplicar todas.", n)
         }
         botaoAplicar.isEnabled = n > 0
         botaoReverter.isEnabled = n > 0

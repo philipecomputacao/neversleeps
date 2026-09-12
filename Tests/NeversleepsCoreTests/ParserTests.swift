@@ -1,4 +1,4 @@
-// ParserTests.swift — Swift Testing (XCTest nao existe nas Command Line Tools).
+// ParserTests.swift, Swift Testing (XCTest nao existe nas Command Line Tools).
 // Cada teste aqui corresponde a um comportamento que ja quebrou ou quase quebrou.
 import Testing
 import Foundation

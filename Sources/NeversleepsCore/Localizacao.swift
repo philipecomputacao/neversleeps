@@ -1,4 +1,4 @@
-// Localizacao.swift — chaves em pt-BR, traducoes em Recursos/<idioma>.lproj.
+// Localizacao.swift, chaves em pt-BR, traducoes em Recursos/<idioma>.lproj.
 //
 // A chave E o texto em portugues (idioma de desenvolvimento). Quando o sistema
 // esta em outro idioma, o bundle procura a traducao em <idioma>.lproj; se nao

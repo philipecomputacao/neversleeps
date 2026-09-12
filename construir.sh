@@ -1,7 +1,7 @@
 #!/bin/bash
 # =============================================================================
-#  construir.sh — compila o neversleeps e monta/instala o neversleeps.app
-#  LP Digital (@lpdigital.me) — MIT
+#  construir.sh, compila o neversleeps e monta/instala o neversleeps.app
+#  LP Digital (@lpdigital.me), MIT
 # =============================================================================
 #
 #  USO
@@ -15,7 +15,7 @@
 #     tocar em qualquer coisa)
 #  2. Gera a arte do icone (Recursos/gerar-icone.swift) e monta o .icns
 #  3. `swift build -c release` (Package.swift), com o cache FORA da pasta do
-#     projeto — a pasta e sincronizada pelo Drive, e .build/ tem milhares de
+#     projeto, a pasta e sincronizada pelo Drive, e .build/ tem milhares de
 #     arquivos transientes
 #  4. Monta o bundle: Info.plist, binario, icone, traducoes (Recursos/*.lproj)
 #  5. Assina ad-hoc (necessario para o "Abrir no Inicio da Sessao")

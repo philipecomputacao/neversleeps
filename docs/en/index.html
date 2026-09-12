@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>neversleeps — keep your MacBook awake with the lid closed. Run Claude Code with the Mac closed.</title>
+<title>neversleeps: keep your MacBook awake with the lid closed. Run Claude Code with the Mac closed.</title>
 <meta name="description" content="Free-forever menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code, builds and downloads with the Mac closed in a bag. One click, Touch ID, and a test that proves it worked. Open source, no telemetry.">
 <link rel="canonical" href="https://philipecomputacao.github.io/neversleeps/en/">
 <link rel="alternate" hreflang="pt-BR" href="https://philipecomputacao.github.io/neversleeps/">
@@ -13,14 +13,14 @@
 <link rel="apple-touch-icon" href="../assets/icone-180.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="neversleeps">
-<meta property="og:title" content="neversleeps — keep your MacBook awake with the lid closed">
+<meta property="og:title" content="neversleeps: keep your MacBook awake with the lid closed">
 <meta property="og:description" content="Run Claude Code with the Mac closed, in a bag. Free forever, open source, no telemetry.">
 <meta property="og:url" content="https://philipecomputacao.github.io/neversleeps/en/">
 <meta property="og:image" content="https://philipecomputacao.github.io/neversleeps/assets/og-en.png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="pt_BR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="neversleeps — keep your MacBook awake with the lid closed">
+<meta name="twitter:title" content="neversleeps: keep your MacBook awake with the lid closed">
 <meta name="twitter:description" content="Run Claude Code with the Mac closed. Free forever, open source, no telemetry.">
 <meta name="twitter:image" content="https://philipecomputacao.github.io/neversleeps/assets/og-en.png">
 <meta name="theme-color" content="#0a0a0c">
@@ -31,7 +31,7 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "neversleeps",
-  "alternateName": "neversleeps — keep your MacBook awake with the lid closed",
+  "alternateName": "neversleeps: keep your MacBook awake with the lid closed",
   "description": "macOS menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code or any long task with the Mac closed. One click, and a test that proves it worked.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "macOS 14 or later",
@@ -94,7 +94,7 @@ a{color:inherit}
 .cmd button:hover{background:rgba(255,255,255,.06)}
 .nota{font-size:13.5px;color:var(--ink3);margin-top:10px}
 .shot{position:relative}
-.shot img{width:100%;height:auto;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px var(--line)}
+.shot img{width:100%;height:auto}
 .shot figcaption{font-size:13px;color:var(--ink3);margin-top:12px;text-align:center}
 /* animacao de entrada: uma so, orquestrada */
 .rev{opacity:0;transform:translateY(14px);animation:rev .7s cubic-bezier(.2,.7,.2,1) forwards}
@@ -149,7 +149,7 @@ footer a{color:var(--ink2);text-decoration:none}
     <div>
       <div class="selo rev">Free forever · open source</div>
       <h1 class="rev">Your MacBook <em>stays awake</em> with the lid closed.</h1>
-      <p class="lead rev">Run Claude Code, a build, a download — any long task — with the Mac closed in a bag. One click in the menu bar, Touch ID, and a test that <strong>proves</strong> it worked.</p>
+      <p class="lead rev">Run Claude Code, a build, a download, any long task, with the Mac closed in a bag. One click in the menu bar, Touch ID, and a test that <strong>proves</strong> it worked.</p>
       <div class="cta rev">
         <a class="btn btn-y" href="https://github.com/philipecomputacao/neversleeps/releases/latest">Download for macOS</a>
         <a class="btn btn-g" href="https://github.com/philipecomputacao/neversleeps">View the code</a>
@@ -161,14 +161,14 @@ footer a{color:var(--ink2);text-decoration:none}
       <p class="nota">macOS 14 or later · Apple Silicon · no <code>sudo</code> · the installer verifies the sha256 before installing</p>
     </div>
     <figure class="shot rev">
-      <img src="../assets/menu-en.png" width="746" height="542" alt="neversleeps menu in the macOS menu bar: the “Prevent Sleep When Lid Is Closed” lock on, tested and passed; Power Settings; Test the Lid">
+      <img src="../assets/menu-en.png" width="860" height="634" alt="neversleeps menu in the macOS menu bar: the “Prevent Sleep When Lid Is Closed” lock on, tested and passed; Power Settings; Test the Lid">
       <figcaption>The real menu: the lock line says whether it is on <em>and</em> whether it was tested.</figcaption>
     </figure>
   </section>
 
   <section id="claude">
     <h2>Use Claude Code with the <em>MacBook closed</em></h2>
-    <p class="sub">This is the situation the app exists for. Three things have to be true — and only the first is the app’s job. The other two it teaches, honestly.</p>
+    <p class="sub">This is the situation the app exists for. Three things have to be true, and only the first is the app’s job. The other two it teaches, honestly.</p>
     <div class="grid3">
       <div class="card"><div class="n">1</div><h3>The Mac must not sleep when closed</h3><p>Click the cup → <b>Prevent Sleep When Lid Is Closed</b> → Touch ID. The cup fills up. That is the whole gesture.</p></div>
       <div class="card"><div class="n">2</div><h3>It needs internet while closed</h3><p>Let the iPhone join on its own: Settings → Wi-Fi → Personal Hotspot → <b>Automatically</b>. Claude Code retries when the network comes back.</p></div>
@@ -189,7 +189,7 @@ footer a{color:var(--ink2);text-decoration:none}
         </ul>
       </div>
       <figure class="shot">
-        <img src="../assets/settings-en.png" width="1566" height="1208" loading="lazy" alt="Power Settings window: power adapter and battery side by side, Apply button">
+        <img src="../assets/settings-en.png" width="1702" height="1344" loading="lazy" alt="Power Settings window: power adapter and battery side by side, Apply button">
         <figcaption>Power Settings: power adapter and battery side by side, every change with a single authentication.</figcaption>
       </figure>
     </div>
@@ -209,8 +209,8 @@ footer a{color:var(--ink2);text-decoration:none}
     <details><summary>What about Amphetamine?</summary><p>It can (Closed-Display Mode), but it is one option among dozens, and nothing tells you whether it actually held. neversleeps is one toggle, and it tests itself.</p></details>
     <details><summary>Can I do it in Terminal?</summary><p>Yes: <code>sudo pmset -a disablesleep 1</code> is exactly what the app runs. The app adds a visible state in the menu bar, one-click on/off, the real test, and a warning if you close the Mac with the lock off.</p></details>
     <details><summary>macOS says the app is not verified. Is it safe?</summary><p>The app is signed but not yet notarized by Apple (that costs a yearly developer account). The one-line installer <b>verifies the sha256</b> published with the release before installing. Installing manually, right-click → Open, once. The code is open; you can build it yourself.</p></details>
-    <details><summary>Does it ask for a password every time?</summary><p>For every power change, yes — through macOS’s own dialog (Touch ID or password). On purpose: there is no <code>sudoers</code> rule and no helper with root left on the system. In the Settings window, several changes cost a single authentication.</p></details>
-    <details><summary>Does it get hot in a bag?</summary><p>Depends on what is running. A Claude Code session is light. Heavy compilation or looping tests, inside a closed pocket, get hot — keep the bag open in that case. The lock does not change physics.</p></details>
+    <details><summary>Does it ask for a password every time?</summary><p>For every power change, yes, through macOS’s own dialog (Touch ID or password). On purpose: there is no <code>sudoers</code> rule and no helper with root left on the system. In the Settings window, several changes cost a single authentication.</p></details>
+    <details><summary>Does it get hot in a bag?</summary><p>Depends on what is running. A Claude Code session is light. Heavy compilation or looping tests, inside a closed pocket, get hot, keep the bag open in that case. The lock does not change physics.</p></details>
     <details><summary>How do I uninstall?</summary><p><code>curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/desinstalar.sh | bash</code>. The lock is a macOS setting and does not go away with the app: the uninstaller asks whether to restore the defaults.</p></details>
   </section>
 

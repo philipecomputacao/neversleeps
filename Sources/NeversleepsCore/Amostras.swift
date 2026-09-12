@@ -1,4 +1,4 @@
-// Amostras.swift — saidas REAIS do pmset, capturadas num MacBookPro17,1 (M1),
+// Amostras.swift, saidas REAIS do pmset, capturadas num MacBookPro17,1 (M1),
 // macOS 26.2, em 12/09/2026. Usadas pelos testes (CI) e pelo alvo `verificar`
 // (local). Se o formato mudar numa versao futura do macOS, acrescente a saida
 // nova aqui e mantenha a antiga: o parser precisa ler as duas.

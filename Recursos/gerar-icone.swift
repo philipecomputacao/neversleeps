@@ -1,5 +1,5 @@
 // =============================================================================
-//  gerar-icone.swift — desenha o icone do neversleeps
+//  gerar-icone.swift, desenha o icone do neversleeps
 //  LP Digital (@lpdigital.me)
 // =============================================================================
 //
@@ -77,7 +77,7 @@ guard let simbolo = NSImage(systemSymbolName: "cup.and.saucer.fill", accessibili
 }
 
 // Bitmap com tamanho EXATO em pixels. Usar lockFocus() numa NSImage herdaria o
-// fator Retina da tela e gravaria 2048 num monitor e 1024 noutro — o icone nao
+// fator Retina da tela e gravaria 2048 num monitor e 1024 noutro, o icone nao
 // pode depender de qual monitor estava ligado na hora de gerar.
 guard let rep = NSBitmapImageRep(bitmapDataPlanes: nil,
                                  pixelsWide: Int(lado), pixelsHigh: Int(lado),
