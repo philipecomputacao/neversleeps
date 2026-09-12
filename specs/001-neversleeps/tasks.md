@@ -167,3 +167,10 @@ todas as camadas em ordem.
 - [ ] T083 (quando houver Developer ID) notarização, Sparkle, cask sem caveat
 - [ ] T084 (exige Xcode) ícone no formato do macOS 26
 - [ ] T085 (exige o usuário) screenshots reais no README
+
+## Fase 15 — Landing page e Google (12/09/2026)
+
+- [x] T086 GitHub Pages em `main:/docs`: `https://philipecomputacao.github.io/neversleeps/` (pt-BR) e `/en/`
+- [x] T087 SEO: título/H1 com a busca real, schema SoftwareApplication (preço 0), OG, hreflang, sitemap, robots
+- [x] T088 "Gratuito para sempre" explícito; sem analytics na página
+- [ ] T089 Google Search Console: propriedade + tag de verificação (exige a conta do usuário) + envio do sitemap
