@@ -163,7 +163,7 @@ todas as camadas em ordem.
 - [x] T079 `publicar.sh`: zip `ditto`, sha256, cask, Release com notas do CHANGELOG + instrução Gatekeeper
 - [x] T080 Cask Homebrew (tap pessoal) e GitHub Actions
 - [x] T081 README em inglês + README.pt-BR
-- [ ] T082 Repositório público `philipecomputacao/neversleeps` + release v1.0.0
+- [x] T082 Repositório público `philipecomputacao/neversleeps` + release v1.0.0
 - [ ] T083 (quando houver Developer ID) notarização, Sparkle, cask sem caveat
 - [ ] T084 (exige Xcode) ícone no formato do macOS 26
 - [ ] T085 (exige o usuário) screenshots reais no README
