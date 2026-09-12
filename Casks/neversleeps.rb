@@ -11,8 +11,8 @@
 # Sem Developer ID o Homebrew instala, mas o Gatekeeper ainda pede "botao
 # direito -> Abrir" na primeira vez (o caveat abaixo avisa).
 cask "neversleeps" do
-  version "1.0.0"
-  sha256 "270934415cd138e9d05f8ec23c09354e9776b86374d508bc58d2f4178faad394"
+  version "1.0.1"
+  sha256 "8aa326353715aa17e6cfc7785255ba225f2961bfba63d02ea66f801f16e863ae"
 
   url "https://github.com/philipecomputacao/neversleeps/releases/download/v#{version}/neversleeps-#{version}.zip"
   name "neversleeps"
