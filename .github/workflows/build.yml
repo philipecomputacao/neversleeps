@@ -1,0 +1,27 @@
+# Compila e testa em cada push/PR num macOS limpo — prova que o projeto builda
+# fora da maquina do autor. Gera o .app como artefato.
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Versão do Swift
+        run: swift --version
+      - name: Testes do núcleo (Swift Testing, exige Xcode — o runner tem)
+        run: swift test
+      - name: Portão local (mesmas checagens, sem framework)
+        run: swift run verificar
+      - name: Montar o app
+        run: bash construir.sh --sem-instalar
+      - name: Artefato
+        uses: actions/upload-artifact@v4
+        with:
+          name: neversleeps.app
+          path: dist/neversleeps.app
