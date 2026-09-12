@@ -5,6 +5,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 
 ## [Unreleased]
 
+### Adicionado
+- `install.sh`: instalação em uma linha que baixa a release, confere o sha256, remove a quarentena e instala sem `sudo`.
+- `.sha256` publicado junto do zip em cada release.
+- Templates de issue e PR, `CONTRIBUTING.md`, `SECURITY.md`.
+
 ## [1.0.0] — 2026-09-12
 
 ### Adicionado

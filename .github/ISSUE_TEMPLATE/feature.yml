@@ -1,0 +1,20 @@
+name: Sugestão / Feature request
+description: Uma ideia para o app. / An idea for the app.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Que problema isso resolve? / What problem does it solve?
+      description: Descreva a situação, não a solução. / Describe the situation, not the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Proposta / Proposal
+  - type: markdown
+    attributes:
+      value: |
+        Regras que o projeto não muda: autenticação do macOS a cada alteração (sem sudoers, sem helper); menu é o app, não tutorial; sem rede, sem telemetria.
+        Rules the project won't change: macOS authentication per change (no sudoers, no helper); the menu is the app, not a tutorial; no network, no telemetry.

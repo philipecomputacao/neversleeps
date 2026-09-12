@@ -48,6 +48,7 @@ echo "==> Zip com ditto (preserva a assinatura e os atributos do bundle)"
 rm -f "$ZIP"
 ditto -c -k --keepParent "dist/${NOME}.app" "$ZIP"
 SHA="$(shasum -a 256 "$ZIP" | cut -d' ' -f1)"
+echo "$SHA  $(basename "$ZIP")" > "${ZIP}.sha256"      # o install.sh confere contra isto
 echo "    $ZIP"
 echo "    sha256: $SHA"
 
@@ -62,21 +63,23 @@ cat >> "$NOTAS" <<'EOF'
 
 ---
 
-### Instalação
+### Instalação em uma linha / One-line install
 
-1. Baixe o `.zip`, descompacte e arraste `neversleeps.app` para **Aplicativos**.
-2. **Na primeira abertura, clique com o botão direito → Abrir** (uma vez). O app não é notarizado pela Apple ainda; o macOS avisa e depois não pergunta mais.
-3. Clique na xícara na barra de menus.
+```bash
+curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/install.sh | bash
+```
 
-### Install
+Baixa, confere o sha256, instala em /Applications e abre. Não usa sudo.
+Downloads, verifies the sha256, installs to /Applications and opens. No sudo.
 
-1. Download the `.zip`, unzip, drag `neversleeps.app` to **Applications**.
-2. **First launch: right-click → Open** (once). The app is not yet notarized by Apple; macOS warns once and then stops asking.
-3. Click the cup in the menu bar.
+### Manual
+
+1. Baixe o `.zip`, descompacte e arraste `neversleeps.app` para **Aplicativos**. Na primeira abertura, **botão direito → Abrir** (uma vez): o app não é notarizado pela Apple.
+2. Download the `.zip`, unzip, drag `neversleeps.app` to **Applications**. First launch: **right-click → Open** (once): the app is not notarized by Apple.
 EOF
 
 echo "==> Criando a release v$VERSAO no GitHub"
-gh release create "v$VERSAO" "$ZIP" --title "neversleeps $VERSAO" --notes-file "$NOTAS"
+gh release create "v$VERSAO" "$ZIP" "${ZIP}.sha256" --title "neversleeps $VERSAO" --notes-file "$NOTAS"
 rm -f "$NOTAS"
 echo "Publicado: $(gh release view "v$VERSAO" --json url -q .url)"
 echo

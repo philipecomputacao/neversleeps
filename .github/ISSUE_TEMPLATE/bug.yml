@@ -1,0 +1,34 @@
+name: Bug / Problema
+description: Algo não funcionou como o app disse que funcionaria. / Something didn't work as the app said it would.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Cole a saída de diagnóstico — ela diz exatamente o que o app leu do sistema.
+        Paste the diagnostic output — it says exactly what the app read from the system.
+        ```bash
+        /Applications/neversleeps.app/Contents/MacOS/neversleeps --estado
+        sw_vers -productVersion; uname -m
+        ```
+  - type: textarea
+    id: diagnostico
+    attributes:
+      label: Saída de `--estado` / Output of `--estado`
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: oque
+    attributes:
+      label: O que você fez e o que aconteceu / What you did and what happened
+      placeholder: "Cliquei em… esperava… aconteceu… / I clicked… expected… got…"
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão do neversleeps e do macOS / neversleeps and macOS versions
+      placeholder: "neversleeps 1.0.0 · macOS 26.2 · Apple M1"
+    validations:
+      required: true

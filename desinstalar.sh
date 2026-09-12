@@ -55,7 +55,7 @@ echo "==> 5/5  Estado atual da energia"
 pmset -g | grep -i sleepdisabled || true
 echo
 echo "A trava da tampa e configuracao do macOS e NAO sai com o app."
-read -r -p "Restaurar os padroes de energia do macOS agora? [s/N] " resposta
+read -r -p "Restaurar os padroes de energia do macOS agora? [s/N] " resposta < /dev/tty
 case "$resposta" in
   s|S|sim|Sim)
     if sudo pmset -a disablesleep 0 && sudo pmset restoredefaults; then
