@@ -59,7 +59,7 @@ Then click **Test the Lid…**, close the Mac for one minute, open it. The app r
 | Change other power settings | **Power Settings…** (⌘,), power adapter and battery side by side, one authentication for all changes |
 
 <p align="center"><img src="Recursos/capturas/en/power-settings.png" width="640" alt="Power Settings window: power adapter and battery columns, Apply button"></p>
-| Start with the Mac | **Open at Login** |
+| Start with the Mac | On by default since the first launch. **Open at Login** in the menu is the switch to turn it off |
 | Undo everything | **Restore Power Defaults…** |
 
 ## Why not `caffeinate` or Amphetamine?

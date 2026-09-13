@@ -5,6 +5,11 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 
 ## [Unreleased]
 
+## [1.0.2], 2026-09-12
+
+### Adicionado
+- Abre sozinho ao reiniciar o Mac: o app se registra nos Itens de Início de Sessão na primeira abertura, e o `install.sh` e o `construir.sh` registram logo após instalar. O item "Abrir no Início da Sessão" vira a chave para desligar. Novo modo `--registrar-login`.
+
 ### Corrigido
 - Homebrew: o cask vive no tap `philipecomputacao/homebrew-neversleeps`. Fluxo: `brew trust`, `brew tap`, `brew install --cask` (o Homebrew atual exige confiar no tap antes de tapar).
 

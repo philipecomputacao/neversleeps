@@ -33,6 +33,7 @@
 //  -------------------------
 //  neversleeps --estado               imprime o que o app le do sistema
 //  neversleeps --repousos <minutos>   repousos do log nos ultimos N minutos
+//  neversleeps --registrar-login      poe o app nos Itens de Inicio de Sessao
 //  neversleeps --desregistrar-login   tira o app dos Itens de Inicio de Sessao
 //  (binario em /Applications/neversleeps.app/Contents/MacOS/neversleeps)
 //
@@ -66,6 +67,23 @@ if let i = CommandLine.arguments.firstIndex(of: "--repousos"),
     let r = Sistema.repousosDesde(Date().addingTimeInterval(-Double(min) * 60))
     print("repousos nos ultimos \(min) min: \(r.count)")
     for l in r { print("  \(l.descricao)") }
+    exit(0)
+}
+
+if CommandLine.arguments.contains("--registrar-login") {
+    // Usado pelo install.sh e pelo construir.sh logo apos instalar: registra o app
+    // nos Itens de Inicio de Sessao e imprime o que o macOS respondeu.
+    do {
+        if SMAppService.mainApp.status != .enabled { try SMAppService.mainApp.register() }
+        switch SMAppService.mainApp.status {
+        case .enabled:          print("inicio de sessao: registrado")
+        case .requiresApproval: print("inicio de sessao: aguardando aprovacao em Ajustes do Sistema > Geral > Itens de Inicio de Sessao")
+        default:                print("inicio de sessao: nao registrado")
+        }
+    } catch {
+        print("inicio de sessao: falhou (\(error.localizedDescription))")
+        exit(1)
+    }
     exit(0)
 }
 

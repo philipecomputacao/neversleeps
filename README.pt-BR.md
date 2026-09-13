@@ -59,7 +59,7 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 | Mudar outros ajustes de energia | **Ajustes de Energia…** (⌘,), tomada e bateria lado a lado, uma autenticação para tudo |
 
 <p align="center"><img src="Recursos/capturas/pt-BR/ajustes.png" width="640" alt="Janela Ajustes de Energia: colunas Tomada e Bateria, botão Aplicar"></p>
-| Abrir junto com o Mac | **Abrir no Início da Sessão** |
+| Abrir junto com o Mac | Já vem ligado desde a primeira abertura. **Abrir no Início da Sessão** no menu é a chave para desligar |
 | Desfazer tudo | **Restaurar Padrões de Energia…** |
 
 ## Por que não `caffeinate` ou Amphetamine?

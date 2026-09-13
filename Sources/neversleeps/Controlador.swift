@@ -55,9 +55,14 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
             || CommandLine.arguments.contains("--capturar") { return }
         #endif
 
-        // Primeira abertura: mostra onde o app mora, abrindo o proprio menu.
+        // Primeira abertura: registra no inicio da sessao (o item do menu e a
+        // chave para desligar) e mostra onde o app mora, abrindo o proprio menu.
+        // Sem isto, depois de um reinicio nao ha icone para desligar a trava.
         if !Prefs.jaAbriu {
             Prefs.jaAbriu = true
+            if SMAppService.mainApp.status == .notRegistered {
+                try? SMAppService.mainApp.register()
+            }
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
                 self?.item.button?.performClick(nil)
             }

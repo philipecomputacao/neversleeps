@@ -76,8 +76,8 @@ final class JanelaAjuda: NSObject {
                    t("Clique na xícara na barra de menus e em “Impedir Repouso ao Fechar a Tampa”. O macOS pede Touch ID ou senha. A xícara fica cheia.")),
             .passo(2, t("Teste uma vez"),
                    t("Ligada não é a mesma coisa que provada. No menu, “Testar a Tampa…”: feche o Mac por 1 minuto e abra. O app lê o registro do sistema e diz se ele repousou. A linha da trava passa a mostrar “testada e aprovada”.")),
-            .passo(3, t("Abra no início da sessão"),
-                   t("Item do menu. Sem isso, depois de reiniciar não há ícone para desligar a trava, e o Mac fica sem repousar sem nenhum aviso.")),
+            .passo(3, t("Deixe abrir no início da sessão"),
+                   t("Já vem ligado: o app se registra na primeira abertura e volta sozinho quando o Mac reinicia. O item do menu é a chave para desligar. Se o macOS pedir aprovação, o item abre a tela certa dos Ajustes.")),
             .passo(4, t("Deixe o iPhone entrar como internet"),
                    t("Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente. Quando o Wi-Fi conhecido sumir, o Mac entra no 3G/4G do iPhone sozinho, mesmo fechado. É um ajuste do Wi-Fi: o app não o controla.")),
 

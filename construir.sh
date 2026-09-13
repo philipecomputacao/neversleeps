@@ -132,6 +132,7 @@ fi
 rm -rf "$DESTINO"
 cp -R "$APP" "$DESTINO"
 open "$DESTINO"
+"$DESTINO/Contents/MacOS/${NOME}" --registrar-login 2>/dev/null || true
 
 echo
 echo "Pronto (versao $VERSAO). O icone esta na barra de menus, no alto a direita."

@@ -113,8 +113,8 @@
 "Clique na xícara na barra de menus e em “Impedir Repouso ao Fechar a Tampa”. O macOS pede Touch ID ou senha. A xícara fica cheia." = "Click the cup in the menu bar, then “Prevent Sleep When Lid Is Closed”. macOS asks for Touch ID or your password. The cup fills up.";
 "Teste uma vez" = "Test it once";
 "Ligada não é a mesma coisa que provada. No menu, “Testar a Tampa…”: feche o Mac por 1 minuto e abra. O app lê o registro do sistema e diz se ele repousou. A linha da trava passa a mostrar “testada e aprovada”." = "On is not the same as proven. In the menu, “Test the Lid…”: close the Mac for 1 minute and open it. The app reads the system record and tells you whether it slept. The lock line then shows “tested and passed”.";
-"Abra no início da sessão" = "Open at login";
-"Item do menu. Sem isso, depois de reiniciar não há ícone para desligar a trava, e o Mac fica sem repousar sem nenhum aviso." = "Menu item. Without it, after a restart there is no icon to turn the lock off, and the Mac stays awake with no warning.";
+"Deixe abrir no início da sessão" = "Let it open at login";
+"Já vem ligado: o app se registra na primeira abertura e volta sozinho quando o Mac reinicia. O item do menu é a chave para desligar. Se o macOS pedir aprovação, o item abre a tela certa dos Ajustes." = "On by default: the app registers itself on first launch and comes back on its own when the Mac restarts. The menu item is the switch to turn it off. If macOS asks for approval, the item opens the right Settings pane.";
 "Deixe o iPhone entrar como internet" = "Let the iPhone join as internet";
 "Ajustes do Sistema → Wi-Fi → Acesso Pessoal → Automaticamente. Quando o Wi-Fi conhecido sumir, o Mac entra no 3G/4G do iPhone sozinho, mesmo fechado. É um ajuste do Wi-Fi: o app não o controla." = "System Settings → Wi-Fi → Personal Hotspot → Automatically. When the known Wi-Fi disappears, the Mac joins the iPhone's cellular data on its own, even closed. It's a Wi-Fi setting: the app doesn't control it.";
 "Lendo o ícone" = "Reading the icon";

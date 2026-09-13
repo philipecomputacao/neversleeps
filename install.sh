@@ -12,7 +12,8 @@
 #  4. Extrai com ditto, remove a marca de quarentena (o app nao e notarizado;
 #     sem isto o macOS exigiria "botao direito -> Abrir") e copia para
 #     /Applications, substituindo a versao anterior.
-#  5. Abre o app. O icone (xicara) aparece na barra de menus.
+#  5. Abre o app e o registra para abrir sozinho ao reiniciar o Mac (desliga-se
+#     pelo menu, em "Abrir no Inicio da Sessao"). O icone aparece na barra.
 #
 #  NAO usa sudo. NAO instala nada alem do .app. Para remover:
 #    curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/desinstalar.sh | bash
@@ -77,6 +78,8 @@ fi
 rm -rf "$DESTINO"
 ditto "${NOME}.app" "$DESTINO"
 open "$DESTINO"
+# Abre sozinho ao reiniciar o Mac. Desliga-se pelo menu, em "Abrir no Inicio da Sessao".
+"$DESTINO/Contents/MacOS/${NOME}" --registrar-login 2>/dev/null || true
 
 echo
 say "Pronto: neversleeps ${VERSAO} instalado."
