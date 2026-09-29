@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>neversleeps: keep your MacBook awake with the lid closed. Run Claude Code with the Mac closed.</title>
-<meta name="description" content="Free-forever menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code, builds and downloads with the Mac closed in a bag. One click, Touch ID, and a test that proves it worked. Open source, no telemetry.">
+<meta name="description" content="Free-forever menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code, builds and downloads with the Mac closed in a bag. One click, Touch ID, and a test that proves it worked. If the power goes out, it starts up on its own and resumes Claude. Open source, no telemetry.">
 <link rel="canonical" href="https://philipecomputacao.github.io/neversleeps/en/">
 <link rel="alternate" hreflang="pt-BR" href="https://philipecomputacao.github.io/neversleeps/">
 <link rel="alternate" hreflang="en" href="https://philipecomputacao.github.io/neversleeps/en/">
@@ -46,7 +46,7 @@
   "codeRepository": "https://github.com/philipecomputacao/neversleeps",
   "screenshot": "https://philipecomputacao.github.io/neversleeps/assets/menu-en.png",
   "author": { "@type": "Organization", "name": "LP Digital", "url": "https://lpdigital.me" },
-  "featureList": ["Lid lock with one click and Touch ID", "Real lid test that reads the system log", "Power adapter and battery side by side, one authentication", "No network, no telemetry", "Open source, MIT"]
+  "featureList": ["Lid lock with one click and Touch ID", "Real lid test that reads the system log", "Power adapter and battery side by side, one authentication", "Starts up on its own and resumes Claude Code after a power failure", "History with a strip of the last 24 hours", "No network, no telemetry", "Open source, MIT"]
 }
 </script>
 <style>
@@ -134,14 +134,17 @@ details p{color:var(--ink2);margin:12px 0 0;max-width:70ch}
 details code{font-family:var(--mono);font-size:.92em;background:var(--bg2);padding:2px 6px;border-radius:6px}
 footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--ink3);font-size:14px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 footer a{color:var(--ink2);text-decoration:none}
-@media (max-width:860px){.hero{grid-template-columns:1fr;gap:34px;padding-top:28px}.grid3{grid-template-columns:1fr}.dois{grid-template-columns:1fr}.topo nav{display:none}.gratis{padding:30px 22px}}
+/* janelas do app (1.1): capturas em 2x, com largura contida */
+.janela img{max-width:470px;margin:0 auto;display:block}
+.lista code{font-family:var(--mono);font-size:.9em;background:var(--bg2);padding:2px 6px;border-radius:6px;color:var(--ink)}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:34px;padding-top:28px}.grid3{grid-template-columns:1fr}.dois{grid-template-columns:1fr}.inverso>figure{order:2}.topo nav{display:none}.gratis{padding:30px 22px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="topo">
     <a class="marca" href="./"><img src="../assets/icone-180.png" alt="" width="36" height="36">neversleeps</a>
-    <nav><a href="#how">How it works</a><a href="#claude">Claude Code</a><a href="#faq">FAQ</a><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a></nav>
+    <nav><a href="#how">How it works</a><a href="#claude">Claude Code</a><a href="#power">Power failure</a><a href="#history">History</a><a href="#faq">FAQ</a><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a></nav>
     <a class="lang" href="../" hreflang="pt-BR">Português</a>
   </header>
 
@@ -191,6 +194,45 @@ footer a{color:var(--ink2);text-decoration:none}
       <figure class="shot">
         <img src="../assets/settings-en.png" width="1702" height="1344" loading="lazy" alt="Power Settings window: power adapter and battery side by side, Apply button">
         <figcaption>Power Settings: power adapter and battery side by side, every change with a single authentication.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="power">
+    <div class="dois inverso">
+      <figure class="shot janela">
+        <img src="../assets/energia-en.png" width="1256" height="1684" loading="lazy" alt="Power Failure window: Start Up on Its Own, After Starting Up (FileVault, Remote Login, Screen Sharing), Resume Work with two folders and claude --continue">
+        <figcaption>Power Failure: what happens after the power comes back, with what is turned on in this Mac.</figcaption>
+      </figure>
+      <div>
+        <div class="selo">New in version 1.1</div>
+        <h2>If the power goes out, it <em>gets back to work</em>.</h2>
+        <p class="sub">With the lock on, the Mac does not sleep even when the battery is almost empty. If the power goes out and the battery runs down, it shuts off with everything open. neversleeps takes care of what comes next, and says plainly what cannot be done.</p>
+        <ul class="lista">
+          <li><span><b>Starts up on its own.</b> A MacBook with Apple silicon starts up when the charger has power again. The app shows this setting, lets you change it and verifies it in NVRAM.</span></li>
+          <li><span><b>Gets past FileVault.</b> The app tells you whether the Mac will stop at the unlock screen and how to unlock it over SSH on macOS 26. It never turns FileVault off for you.</span></li>
+          <li><span><b>Resumes Claude.</b> Add your project folders: after an unexpected restart, each one opens in Terminal with <code>claude --continue</code>.</span></li>
+          <li><span><b>Tells you what happened.</b> When the battery ran out, at what charge, and when the Mac started up again.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="history">
+    <div class="dois">
+      <div>
+        <div class="selo">New in version 1.1</div>
+        <h2>What happened while <em>you were not looking</em>.</h2>
+        <p class="sub"><b>⌘Y</b> opens History: a strip of the last 24 hours and every event of the last 30 days, with the time and the reason.</p>
+        <ul class="lista">
+          <li><span><b>The 24-hour strip.</b> Power adapter, battery, sleep and off, side by side. Hover to see from when to when.</span></li>
+          <li><span><b>Every event, with the reason.</b> Went to sleep when the lid closed with the lock off? Unplugged at 01:14 at 100%? It is there, grouped by day.</span></li>
+          <li><span><b>Recorded on the spot, kept only on your Mac.</b> A small file the app writes as things happen. Nothing leaves the machine.</span></li>
+        </ul>
+      </div>
+      <figure class="shot janela">
+        <img src="../assets/historico-en.png" width="1376" height="1560" loading="lazy" alt="History window: strip of the last 24 hours with power adapter, battery, sleep and off, and today and yesterday's events">
+        <figcaption>History: the last 24 hours strip and the events by day.</figcaption>
       </figure>
     </div>
   </section>

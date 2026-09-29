@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>neversleeps: o MacBook não dorme com a tampa fechada. Use o Claude Code com o Mac fechado.</title>
-<meta name="description" content="App gratuito para sempre que mantém o MacBook acordado com a tampa fechada. Rode o Claude Code, builds e downloads com o Mac fechado na mochila. Um clique, Touch ID, e um teste que prova que funcionou. Código aberto, sem telemetria.">
+<meta name="description" content="App gratuito para sempre que mantém o MacBook acordado com a tampa fechada. Rode o Claude Code, builds e downloads com o Mac fechado na mochila. Um clique, Touch ID, e um teste que prova que funcionou. Se a luz cair, liga sozinho e retoma o Claude. Código aberto, sem telemetria.">
 <link rel="canonical" href="https://philipecomputacao.github.io/neversleeps/">
 <link rel="alternate" hreflang="pt-BR" href="https://philipecomputacao.github.io/neversleeps/">
 <link rel="alternate" hreflang="en" href="https://philipecomputacao.github.io/neversleeps/en/">
@@ -46,7 +46,7 @@
   "codeRepository": "https://github.com/philipecomputacao/neversleeps",
   "screenshot": "https://philipecomputacao.github.io/neversleeps/assets/menu-pt.png",
   "author": { "@type": "Organization", "name": "LP Digital", "url": "https://lpdigital.me" },
-  "featureList": ["Trava da tampa com um clique e Touch ID", "Teste real da tampa que lê o log do sistema", "Tomada e bateria lado a lado, uma autenticação", "Sem rede, sem telemetria", "Código aberto, MIT"]
+  "featureList": ["Trava da tampa com um clique e Touch ID", "Teste real da tampa que lê o log do sistema", "Tomada e bateria lado a lado, uma autenticação", "Liga sozinho e retoma o Claude Code depois de uma queda de energia", "Histórico com a fita das últimas 24 horas", "Sem rede, sem telemetria", "Código aberto, MIT"]
 }
 </script>
 <style>
@@ -134,14 +134,17 @@ details p{color:var(--ink2);margin:12px 0 0;max-width:70ch}
 details code{font-family:var(--mono);font-size:.92em;background:var(--bg2);padding:2px 6px;border-radius:6px}
 footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--ink3);font-size:14px;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 footer a{color:var(--ink2);text-decoration:none}
-@media (max-width:860px){.hero{grid-template-columns:1fr;gap:34px;padding-top:28px}.grid3{grid-template-columns:1fr}.dois{grid-template-columns:1fr}.topo nav{display:none}.gratis{padding:30px 22px}}
+/* janelas do app (1.1): capturas em 2x, com largura contida */
+.janela img{max-width:470px;margin:0 auto;display:block}
+.lista code{font-family:var(--mono);font-size:.9em;background:var(--bg2);padding:2px 6px;border-radius:6px;color:var(--ink)}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:34px;padding-top:28px}.grid3{grid-template-columns:1fr}.dois{grid-template-columns:1fr}.inverso>figure{order:2}.topo nav{display:none}.gratis{padding:30px 22px}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="topo">
     <a class="marca" href="./"><img src="assets/icone-180.png" alt="" width="36" height="36">neversleeps</a>
-    <nav><a href="#como">Como funciona</a><a href="#claude">Claude Code</a><a href="#faq">Perguntas</a><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a></nav>
+    <nav><a href="#como">Como funciona</a><a href="#claude">Claude Code</a><a href="#energia">Falta de energia</a><a href="#historico">Histórico</a><a href="#faq">Perguntas</a><a href="https://github.com/philipecomputacao/neversleeps">GitHub</a></nav>
     <a class="lang" href="en/" hreflang="en">English</a>
   </header>
 
@@ -191,6 +194,45 @@ footer a{color:var(--ink2);text-decoration:none}
       <figure class="shot">
         <img src="assets/ajustes-pt.png" width="1768" height="1344" loading="lazy" alt="Janela Ajustes de Energia: tomada e bateria lado a lado, botão Aplicar">
         <figcaption>Ajustes de Energia: tomada e bateria lado a lado, todas as mudanças com uma única autenticação.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="energia">
+    <div class="dois inverso">
+      <figure class="shot janela">
+        <img src="assets/energia-pt.png" width="1256" height="1688" loading="lazy" alt="Janela Falta de Energia: Ligar Sozinho, Depois de Ligar (FileVault, Acesso Remoto, Compartilhamento de Tela), Retomar o Trabalho com duas pastas e claude --continue">
+        <figcaption>Falta de Energia: o que acontece depois que a luz volta, com o que está ligado neste Mac.</figcaption>
+      </figure>
+      <div>
+        <div class="selo">Novo na versão 1.1</div>
+        <h2>Se a luz cair, ele <em>volta ao trabalho</em>.</h2>
+        <p class="sub">Com a trava ligada, o Mac não repousa nem com a bateria no fim. Se a energia cai e a bateria acaba, ele desliga com tudo aberto. O neversleeps cuida do que vem depois, e diz com todas as letras o que não dá para fazer.</p>
+        <ul class="lista">
+          <li><span><b>Liga sozinho.</b> MacBook com chip Apple liga quando o carregador volta a ter energia. O app mostra esse ajuste, deixa mudar e confere na NVRAM.</span></li>
+          <li><span><b>Passa do FileVault.</b> O app avisa se o Mac vai parar na tela de desbloqueio e mostra como desbloquear por SSH no macOS 26. Nunca desliga o FileVault por você.</span></li>
+          <li><span><b>Retoma o Claude.</b> Cadastre as pastas dos projetos: depois de um reinício inesperado, cada uma abre no Terminal com <code>claude --continue</code>.</span></li>
+          <li><span><b>Conta o que aconteceu.</b> A que horas a bateria acabou, com quanta carga, e quando o Mac religou.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="historico">
+    <div class="dois">
+      <div>
+        <div class="selo">Novo na versão 1.1</div>
+        <h2>O que aconteceu enquanto <em>você não olhava</em>.</h2>
+        <p class="sub"><b>⌘Y</b> abre o Histórico: uma fita das últimas 24 horas e cada acontecimento dos últimos 30 dias, com a hora e o motivo.</p>
+        <ul class="lista">
+          <li><span><b>A fita das 24 horas.</b> Tomada, bateria, repouso e desligado, lado a lado. Passe o mouse e veja de que hora a que hora.</span></li>
+          <li><span><b>Cada acontecimento, com o motivo.</b> Repousou ao fechar a tampa com a trava desligada? Saiu da tomada à 01:14 com 100%? Está lá, agrupado por dia.</span></li>
+          <li><span><b>Anotado na hora, guardado só no seu Mac.</b> Um arquivo pequeno que o app escreve quando as coisas acontecem. Nada sai da máquina.</span></li>
+        </ul>
+      </div>
+      <figure class="shot janela">
+        <img src="assets/historico-pt.png" width="1376" height="1560" loading="lazy" alt="Janela Histórico: fita das últimas 24 horas com tomada, bateria, repouso e desligado, e os acontecimentos de hoje e de ontem">
+        <figcaption>Histórico: a fita das últimas 24 horas e os acontecimentos por dia.</figcaption>
       </figure>
     </div>
   </section>
