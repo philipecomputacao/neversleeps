@@ -50,5 +50,45 @@ do {
     check(!Estado().leituraOk, "estado vazio nao e leitura ok")
 }
 
+print("Falta de energia")
+do {
+    check(Parser.carga(Amostras.battBateria) == 78 && Parser.carga(Amostras.battTomada) == 83, "carga da bateria")
+    check(Parser.carga(Amostras.battSemBateria) == nil, "Mac sem bateria = nao sei")
+    check(Parser.bootPreference(Amostras.nvramSoCarregador) == 1 && Parser.bootPreference(Amostras.nvramNenhum) == 0, "BootPreference %01 e %00")
+    check(Parser.bootPreference(Amostras.nvramAusente) == nil, "erro do nvram nao vira valor")
+    check(Parser.fileVault(Amostras.fileVaultLigado) == true && Parser.fileVault(Amostras.fileVaultDesligado) == false, "FileVault")
+    check(Parser.fileVault("") == nil, "FileVault sem saida = nao sei")
+
+    check(PartidaAutomatica(byte: nil) == .padrao && PartidaAutomatica.padrao.byte == nil, "ausente = padrao, liga nos dois")
+    check(PartidaAutomatica(byte: 0x01) == PartidaAutomatica(aoConectarCarregador: true, aoAbrirTampa: false), "%01 impede so a tampa (Apple 120622)")
+    check(PartidaAutomatica(byte: 0x02) == PartidaAutomatica(aoConectarCarregador: false, aoAbrirTampa: true), "%02 impede so o carregador")
+    check(PartidaAutomatica(byte: 0x07) == nil, "valor nao documentado nao e adivinhado")
+    check(PartidaAutomatica.padrao.comando == "/usr/sbin/nvram -d BootPreference", "padrao apaga a variavel")
+    check(PartidaAutomatica(aoConectarCarregador: false, aoAbrirTampa: false).comando == "/usr/sbin/nvram BootPreference=%00", "comando %00")
+    let ida = [0x00, 0x01, 0x02].allSatisfy { PartidaAutomatica(byte: UInt8($0))?.byte == UInt8($0) }
+    check(ida, "byte vai e volta")
+
+    check(Reinicio.avaliar(bootAtual: 100, bootConhecido: nil, encerradoNoBoot: nil) == .primeiraVez, "sem registro = primeira vez")
+    check(Reinicio.avaliar(bootAtual: 100.4, bootConhecido: 100, encerradoNoBoot: nil) == .mesmaPartida, "mesmo boottime = so reabriu o app")
+    check(Reinicio.avaliar(bootAtual: 500, bootConhecido: 100, encerradoNoBoot: 100) == .encerradoNormal, "app viu o proprio fim = normal")
+    check(Reinicio.avaliar(bootAtual: 500, bootConhecido: 100, encerradoNoBoot: 50) == .inesperado, "fim visto em outra partida nao vale")
+    check(Reinicio.avaliar(bootAtual: 500, bootConhecido: 100, encerradoNoBoot: nil) == .inesperado, "sem fim visto = inesperado")
+
+    var p = PeriodoNaBateria(inicio: Date(), bateriaInicio: 80)
+    check(Relato.causa(nil) == .desconhecida, "na tomada = causa desconhecida")
+    check(Relato.causa(p) == .estavaNaBateria, "na bateria com carga alta")
+    p.ultimaBateria = 3
+    check(Relato.causa(p) == .bateriaAcabou, "na bateria com 3% = a bateria acabou")
+    p.fim = Date()
+    check(Relato.causa(p) == .desconhecida, "periodo encerrado nao explica o reinicio")
+
+    let tarefa = Tarefa(pasta: "~/Projetos/it's", comando: "claude --continue")
+    let s = tarefa.script(casa: "/Users/x")
+    check(s.contains("cd '/Users/x/Projetos/it'\\''s' ||"), "til expandido e aspa simples escapada")
+    check(s.contains("\nclaude --continue\n"), "comando em linha propria")
+    check(s.hasPrefix("#!/bin/zsh -l\n"), "shell de login: PATH do usuario")
+    check(!Tarefa(pasta: " ", comando: "x").valida && Tarefa(pasta: "~", comando: "x").valida, "tarefa valida")
+}
+
 print(falhas == 0 ? "\nTudo certo: nenhuma falha." : "\n\(falhas) falha(s).")
 exit(falhas == 0 ? 0 : 1)

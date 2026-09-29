@@ -52,6 +52,36 @@ public enum Parser {
         return nil
     }
 
+    /// `pmset -g batt` -> carga em %, da linha "-InternalBattery-0 (...)\t78%; ...".
+    /// nil = Mac sem bateria ou linha em outro formato.
+    public static func carga(_ texto: String) -> Int? {
+        for linha in texto.split(separator: "\n") where linha.contains("InternalBattery") {
+            guard let fim = linha.firstIndex(of: "%") else { return nil }
+            let digitos = linha[..<fim].reversed().prefix { $0.isNumber }
+            return Int(String(digitos.reversed()))
+        }
+        return nil
+    }
+
+    /// `nvram BootPreference` -> o byte. A NVRAM imprime bytes nao imprimiveis
+    /// como %xx ("BootPreference\t%01"). nil = formato que nao reconheco.
+    public static func bootPreference(_ texto: String) -> UInt8? {
+        guard let linha = texto.split(separator: "\n").first(where: { $0.hasPrefix("BootPreference") }),
+              let r = linha.range(of: "%") else { return nil }
+        let hex = linha[r.upperBound...].prefix(2)
+        guard hex.count == 2 else { return nil }
+        return UInt8(hex, radix: 16)
+    }
+
+    /// `fdesetup status` -> "FileVault is On." / "FileVault is Off.". A linha
+    /// pode vir seguida de outras (criptografia em andamento).
+    public static func fileVault(_ texto: String) -> Bool? {
+        guard let primeira = texto.split(separator: "\n").first else { return nil }
+        if primeira.hasPrefix("FileVault is On") { return true }
+        if primeira.hasPrefix("FileVault is Off") { return false }
+        return nil
+    }
+
     /// `pmset -g log` -> linhas "Entering Sleep" com carimbo >= inicio.
     /// E a testemunha independente do teste da tampa: se o Mac repousou, esta aqui.
     public static func repousos(log texto: String, desde inicio: Date) -> [Repouso] {

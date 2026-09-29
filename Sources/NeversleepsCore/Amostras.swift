@@ -69,4 +69,15 @@ public enum Amostras {
     2026-09-12 09:10:12 -0300 Wake                \tWake from Deep Idle [CDNVA] : due to smc.sysState.Wake(0x70070000) lid SMC.OutboxNotEmpty/UserActivity Assertion Using AC (Charge:84%)
     2026-09-12 09:10:12 -0300 Notification        \tDisplay is turned on
     """
+
+    // Falta de energia, 29/09/2026, mesma maquina. Ausente e FileVault sao saidas
+    // reais; %01 e %00 seguem o formato que o `nvram -p` desta maquina usa para
+    // bytes nao imprimiveis (a variavel nunca foi gravada aqui).
+    /// `nvram BootPreference` com a variavel ausente: sai com 1, isto no stderr.
+    public static let nvramAusente = "nvram: Error getting variable - 'BootPreference': (iokit/common) data was not found\n"
+    public static let nvramSoCarregador = "BootPreference\t%01\n"
+    public static let nvramNenhum = "BootPreference\t%00\n"
+    public static let fileVaultLigado = "FileVault is On.\n"
+    public static let fileVaultDesligado = "FileVault is Off.\n"
+    public static let battSemBateria = "Now drawing from 'AC Power'\n"
 }

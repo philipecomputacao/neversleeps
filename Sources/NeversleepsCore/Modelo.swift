@@ -69,6 +69,7 @@ public struct Estado {
     public var bateria: [String: Int] = [:]
     public var trava: Bool? = nil
     public var emUso: Fonte? = nil          // de onde o Mac esta puxando energia AGORA
+    public var carga: Int? = nil            // % da bateria AGORA
 
     public init() {}
 
@@ -166,13 +167,21 @@ public enum Catalogo {
                    (3,  t("Memória e Disco (padrão)")),
                    (25, t("Só no Disco (acorda devagar)"))
                ]),
-               escopo: .porFonte, simbolo: "archivebox")
+               escopo: .porFonte, simbolo: "archivebox"),
+
+        // So existe em Mac de mesa: MacBook nao lista `autorestart` no pmset
+        // (medido, M1). Em notebook, quem liga depois da queda e o
+        // BootPreference, na janela Falta de Energia.
+        Ajuste(chave: "autorestart", titulo: t("Iniciar Após Falta de Energia"),
+               subtitulo: t("Liga sozinho quando a energia volta"),
+               aviso: nil, tipo: .booleana, escopo: .porFonte, simbolo: "bolt.horizontal.circle")
     ] }
 
     /// Chaves do catalogo, usadas pelo parser para saber onde esta o valor.
     public static let chavesConhecidas: Set<String> = [
         "sleep", "displaysleep", "disksleep", "powernap", "standby", "womp",
-        "tcpkeepalive", "ttyskeepawake", "lowpowermode", "lessbright", "hibernatemode"
+        "tcpkeepalive", "ttyskeepawake", "lowpowermode", "lessbright", "hibernatemode",
+        "autorestart"
     ]
 }
 
