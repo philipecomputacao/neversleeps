@@ -49,6 +49,18 @@ Then click **Test the Lid…**, close the Mac for one minute, open it. The app r
 
 <p align="center"><img src="Recursos/capturas/en/menu.png" width="420" alt="neversleeps menu: lock line reading “On · tested and passed”, Power Settings, Test the Lid"></p>
 
+## If the power goes out
+
+With the lock on, the Mac does not sleep even when the battery is almost empty: the kernel refuses even the emergency sleep. If the power goes out and the battery runs down, it shuts off with everything that was running. The **Power Failure…** window takes care of what comes next:
+
+1. **Start up on its own.** On a MacBook with Apple silicon (macOS 15+), a Mac that is off starts up when the charger delivers power. This is the macOS default (`nvram BootPreference`); the window shows it, lets you change it and verifies it. On a desktop Mac, the setting is **Start Up After Power Failure**, in Power Settings.
+2. **Get past FileVault.** With FileVault on, the Mac stops at the unlock screen before macOS loads. On macOS 26, with **Remote Login** on, you can unlock it from another device on the same network with `ssh user@mac-name.local`; after that, log in through **Screen Sharing**. The window tells you what is on; the app never turns FileVault off.
+3. **Resume.** Add the folders Claude Code works in. After an unexpected restart, the app opens each one in Terminal with the chosen command (`claude --continue` by default) and reports what happened: whether the battery ran out, when, and at what charge. **Resume Now** proves it works.
+
+The app knows the restart was unexpected because shutting down or restarting from the Apple menu quits apps, and it sees that; a power failure, a freeze and the power button held down quit nothing.
+
+<p align="center"><img src="Recursos/capturas/en/power-failure.png" width="560" alt="Power Failure window: Start Up on Its Own, After Starting Up, Resume Work, What Happened"></p>
+
 ## What it does
 
 | I want to | Do this |
@@ -60,6 +72,7 @@ Then click **Test the Lid…**, close the Mac for one minute, open it. The app r
 
 <p align="center"><img src="Recursos/capturas/en/power-settings.png" width="640" alt="Power Settings window: power adapter and battery columns, Apply button"></p>
 | Start with the Mac | On by default since the first launch. **Open at Login** in the menu is the switch to turn it off |
+| Get back to work after a power failure | **Power Failure…**: starts up on its own, reports, and reopens your tasks in Terminal |
 | Undo everything | **Restore Power Defaults…** |
 
 ## Why not `caffeinate` or Amphetamine?

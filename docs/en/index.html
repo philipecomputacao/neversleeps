@@ -35,7 +35,7 @@
   "description": "macOS menu bar app that keeps your MacBook awake with the lid closed. Run Claude Code or any long task with the Mac closed. One click, and a test that proves it worked.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "macOS 14 or later",
-  "softwareVersion": "1.0.2",
+  "softwareVersion": "1.1.0",
   "inLanguage": ["en", "pt-BR"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock" },
@@ -210,6 +210,7 @@ footer a{color:var(--ink2);text-decoration:none}
     <details><summary>Can I do it in Terminal?</summary><p>Yes: <code>sudo pmset -a disablesleep 1</code> is exactly what the app runs. The app adds a visible state in the menu bar, one-click on/off, the real test, and a warning if you close the Mac with the lock off.</p></details>
     <details><summary>macOS says the app is not verified. Is it safe?</summary><p>The app is signed but not yet notarized by Apple (that costs a yearly developer account). The one-line installer <b>verifies the sha256</b> published with the release before installing. Installing manually, right-click → Open, once. The code is open; you can build it yourself.</p></details>
     <details><summary>Does it ask for a password every time?</summary><p>For every power change, yes, through macOS’s own dialog (Touch ID or password). On purpose: there is no <code>sudoers</code> rule and no helper with root left on the system. In the Settings window, several changes cost a single authentication.</p></details>
+    <details><summary>What if the power goes out?</summary><p>With the lock on, the Mac does not sleep even when the battery is almost empty: if the power goes out and the battery runs down, it shuts off with everything open. The <b>Power Failure…</b> window handles the rest: a MacBook with Apple silicon starts up on its own when the charger has power again, the app tells you whether FileVault will stop the Mac at the unlock screen (and how to unlock it over SSH on macOS 26), and it reopens the folders you added in Terminal, with <code>claude --continue</code>.</p></details>
     <details><summary>Does it get hot in a bag?</summary><p>Depends on what is running. A Claude Code session is light. Heavy compilation or looping tests, inside a closed pocket, get hot, keep the bag open in that case. The lock does not change physics.</p></details>
     <details><summary>How do I uninstall?</summary><p><code>curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/desinstalar.sh | bash</code>. The lock is a macOS setting and does not go away with the app: the uninstaller asks whether to restore the defaults.</p></details>
   </section>

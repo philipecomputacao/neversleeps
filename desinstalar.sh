@@ -50,6 +50,8 @@ fi
 
 echo "==> 4/5  Apagando as preferencias do app"
 defaults delete "$BUNDLE_ID" 2>/dev/null && echo "    apagadas" || echo "    nao havia preferencias"
+# Arquivos .command da retomada (Falta de Energia).
+rm -rf "$HOME/Library/Application Support/${NOME}"
 
 echo "==> 5/5  Estado atual da energia"
 pmset -g | grep -i sleepdisabled || true
@@ -58,18 +60,18 @@ echo "A trava da tampa e configuracao do macOS e NAO sai com o app."
 read -r -p "Restaurar os padroes de energia do macOS agora? [s/N] " resposta < /dev/tty
 case "$resposta" in
   s|S|sim|Sim)
-    if sudo pmset -a disablesleep 0 && sudo pmset restoredefaults; then
+    if sudo pmset -a disablesleep 0 && sudo pmset restoredefaults && (sudo nvram -d BootPreference || true); then
       echo
       echo "Restaurado. Conferindo:"
       pmset -g | grep -i sleepdisabled
     else
       echo
       echo "FALHOU: os padroes NAO foram restaurados. Rode a mao:"
-      echo "  sudo pmset -a disablesleep 0 && sudo pmset restoredefaults"
+      echo "  sudo pmset -a disablesleep 0 && sudo pmset restoredefaults && (sudo nvram -d BootPreference || true)"
     fi
     ;;
   *)
     echo "Nada alterado na energia. Para desfazer depois, rode:"
-    echo "  sudo pmset -a disablesleep 0 && sudo pmset restoredefaults"
+    echo "  sudo pmset -a disablesleep 0 && sudo pmset restoredefaults && (sudo nvram -d BootPreference || true)"
     ;;
 esac

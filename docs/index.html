@@ -35,7 +35,7 @@
   "description": "App de barra de menus para macOS que mantém o MacBook acordado com a tampa fechada. Rode o Claude Code ou qualquer tarefa longa com o Mac fechado. Um clique, e um teste que prova que funcionou.",
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "macOS 14 ou superior",
-  "softwareVersion": "1.0.2",
+  "softwareVersion": "1.1.0",
   "inLanguage": ["pt-BR", "en"],
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL", "availability": "https://schema.org/InStock" },
@@ -210,6 +210,7 @@ footer a{color:var(--ink2);text-decoration:none}
     <details><summary>Dá para fazer no Terminal?</summary><p>Sim: <code>sudo pmset -a disablesleep 1</code> é exatamente o que o app roda. O app acrescenta o estado visível na barra de menus, liga/desliga com um clique, o teste real e o aviso se você fechar o Mac com a trava desligada.</p></details>
     <details><summary>O macOS avisa que o app não é verificado. É seguro?</summary><p>O app é assinado, mas ainda não notarizado pela Apple (isso custa uma conta de desenvolvedor anual). O instalador de uma linha <b>confere o sha256</b> publicado na release antes de instalar. Instalando manualmente, clique com o botão direito → Abrir, uma vez. O código é aberto; você pode compilar você mesmo.</p></details>
     <details><summary>Ele pede senha toda vez?</summary><p>A cada alteração de energia, sim, pelo diálogo do próprio macOS (Touch ID ou senha). É de propósito: não há regra de <code>sudoers</code> nem helper com root pendurado no sistema. Na janela de Ajustes, várias mudanças custam uma autenticação só.</p></details>
+    <details><summary>E se a energia cair?</summary><p>Com a trava ligada, o Mac não repousa nem com a bateria no fim: se a luz cair e a bateria acabar, ele desliga com tudo aberto. A janela <b>Falta de Energia…</b> cuida do resto: o MacBook com chip Apple liga sozinho quando o carregador volta a ter energia, o app diz se o FileVault vai parar o Mac na tela de desbloqueio (e como desbloquear por SSH no macOS 26), e reabre no Terminal as pastas que você cadastrou, com <code>claude --continue</code>.</p></details>
     <details><summary>Esquenta na mochila?</summary><p>Depende do que está rodando. Sessão do Claude Code é leve. Compilação pesada ou testes em loop, dentro de um bolso fechado, esquentam, nesse caso, mochila aberta. A trava não muda a física.</p></details>
     <details><summary>Como desinstalo?</summary><p><code>curl -fsSL https://raw.githubusercontent.com/philipecomputacao/neversleeps/main/desinstalar.sh | bash</code>. A trava é ajuste do macOS e não sai com o app: o desinstalador pergunta se deve restaurar os padrões.</p></details>
   </section>

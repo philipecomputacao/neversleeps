@@ -5,6 +5,16 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 
 ## [Unreleased]
 
+## [1.1.0], 2026-09-29
+
+### Adicionado
+- Janela **Falta de Energia…**, com item próprio no menu e legenda de estado ("Liga sozinho com o carregador · retoma 2 tarefas").
+- Ligar sozinho quando a energia volta: lê e altera o `nvram BootPreference` (MacBook com chip Apple, macOS 15+), com uma autenticação e releitura de conferência. Em Mac de mesa, o `autorestart` aparece em Ajustes de Energia como "Iniciar Após Falta de Energia".
+- Diagnóstico do que acontece depois de ligar: FileVault, Acesso Remoto (desbloqueio por SSH no macOS 26) e Compartilhamento de Tela, com o comando `ssh` pronto para copiar.
+- Reinício inesperado: o app reconhece pela mudança do `kern.boottime` sem ter visto o próprio fim, e conta o que aconteceu (se a bateria acabou, desde quando o Mac estava na bateria, com quanta carga).
+- Retomada: pastas e comandos (por padrão `claude --continue`) reabertos no Terminal depois de um reinício inesperado, quando a rede volta. **Retomar Agora** prova que funciona.
+- `--estado` mostra o módulo Falta de Energia. Build de debug: `--simular-reinicio`.
+
 ## [1.0.2], 2026-09-12
 
 ### Adicionado

@@ -49,6 +49,18 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 
 <p align="center"><img src="Recursos/capturas/pt-BR/menu.png" width="420" alt="Menu do neversleeps: linha da trava “Ligada · testada e aprovada”, Ajustes de Energia, Testar a Tampa"></p>
 
+## Se a energia cair
+
+Com a trava ligada, o Mac não repousa nem com a bateria no fim: o kernel recusa até o repouso de emergência. Se a luz cair e a bateria acabar, ele desliga com tudo o que estava rodando. A janela **Falta de Energia…** cuida do que vem depois:
+
+1. **Ligar sozinho.** Num MacBook com chip Apple (macOS 15+), o Mac desligado liga ao receber energia do carregador. É o padrão do macOS (`nvram BootPreference`); a janela mostra, deixa mudar e confere. Em Mac de mesa, o ajuste é **Iniciar Após Falta de Energia**, em Ajustes de Energia.
+2. **Passar do FileVault.** Com o FileVault ligado, o Mac para na tela de desbloqueio antes de o macOS carregar. No macOS 26, com o **Acesso Remoto** ligado, dá para desbloquear de outro aparelho na mesma rede com `ssh usuario@nome-do-mac.local`; depois disso, entre por **Compartilhamento de Tela**. A janela diz o que está ligado; o app nunca desliga o FileVault.
+3. **Retomar.** Cadastre as pastas em que o Claude Code trabalha. Depois de um reinício inesperado, o app abre cada uma no Terminal com o comando escolhido (por padrão `claude --continue`) e mostra o que aconteceu: se a bateria acabou, a que horas e com quanta carga. **Retomar Agora** prova que funciona.
+
+O app sabe que o reinício foi inesperado porque desligar ou reiniciar pelo menu Apple encerra os apps, e ele vê; queda de energia, travamento e o botão de ligar segurado não encerram ninguém.
+
+<p align="center"><img src="Recursos/capturas/pt-BR/falta-de-energia.png" width="560" alt="Janela Falta de Energia: Ligar Sozinho, Depois de Ligar, Retomar o Trabalho, O Que Aconteceu"></p>
+
 ## O que ele faz
 
 | Quero | Faço |
@@ -60,6 +72,7 @@ Depois clique em **Testar a Tampa…**, feche o Mac por um minuto, abra. O app l
 
 <p align="center"><img src="Recursos/capturas/pt-BR/ajustes.png" width="640" alt="Janela Ajustes de Energia: colunas Tomada e Bateria, botão Aplicar"></p>
 | Abrir junto com o Mac | Já vem ligado desde a primeira abertura. **Abrir no Início da Sessão** no menu é a chave para desligar |
+| Voltar a trabalhar depois de uma queda de energia | **Falta de Energia…**: liga sozinho, relata e reabre as tarefas no Terminal |
 | Desfazer tudo | **Restaurar Padrões de Energia…** |
 
 ## Por que não `caffeinate` ou Amphetamine?
