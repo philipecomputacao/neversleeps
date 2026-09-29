@@ -82,6 +82,14 @@ public enum Parser {
         return nil
     }
 
+    /// `ioreg -r -k AppleClamshellState -d 1` -> tampa fechada? 16 ms, sem senha.
+    public static func tampaFechada(_ texto: String) -> Bool? {
+        guard let linha = texto.split(separator: "\n").first(where: { $0.contains("\"AppleClamshellState\"") }) else { return nil }
+        if linha.hasSuffix("Yes") { return true }
+        if linha.hasSuffix("No") { return false }
+        return nil
+    }
+
     /// `pmset -g log` -> linhas "Entering Sleep" com carimbo >= inicio.
     /// E a testemunha independente do teste da tampa: se o Mac repousou, esta aqui.
     public static func repousos(log texto: String, desde inicio: Date) -> [Repouso] {

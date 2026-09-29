@@ -96,6 +96,10 @@ public enum Sistema {
         return Double(tv.tv_sec) + Double(tv.tv_usec) / 1_000_000
     }
 
+    public static func tampaFechada() -> Bool? {
+        rodar("/usr/sbin/ioreg", ["-r", "-k", "AppleClamshellState", "-d", "1"]).flatMap(Parser.tampaFechada)
+    }
+
     /// Nome para o `ssh usuario@nome.local`.
     public static func nomeLocal() -> String? {
         rodar("/usr/sbin/scutil", ["--get", "LocalHostName"])?

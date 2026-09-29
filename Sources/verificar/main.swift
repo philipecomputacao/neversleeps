@@ -90,5 +90,52 @@ do {
     check(!Tarefa(pasta: " ", comando: "x").valida && Tarefa(pasta: "~", comando: "x").valida, "tarefa valida")
 }
 
+print("Historico")
+do {
+    let base = data("2026-09-28 10:00:00 -0300")
+    func em(_ min: Double) -> Date { base.addingTimeInterval(min * 60) }
+    func ev(_ tipo: TipoEvento, _ min: Double, _ ajuste: (inout Evento) -> Void = { _ in }) -> Evento {
+        var e = Evento(tipo, quando: em(min)); ajuste(&e); return e
+    }
+    check(Parser.tampaFechada(Amostras.ioregTampaAberta) == false, "tampa aberta no ioreg")
+    check(Parser.tampaFechada(Amostras.ioregTampaAberta.replacingOccurrences(of: "State\" = No", with: "State\" = Yes")) == true, "tampa fechada no ioreg")
+    check(Parser.tampaFechada("") == nil, "sem ioreg = nao sei")
+    check(Evento.duracao(45) == "45 s" && Evento.duracao(720) == "12 min" && Evento.duracao(72) == "1 min 12 s" && Evento.duracao(8040) == "2 h 14 min" && Evento.duracao(7200) == "2 h", "duracao legivel")
+    check(ev(.repousou, 0) { $0.porTampa = true; $0.trava = false }.descricao == "A trava estava desligada", "repouso pela tampa com a trava desligada e dito")
+    check(ev(.voltouATomada, 0) { $0.duracao = 3000; $0.cargaInicial = 90; $0.carga = 71 }.descricao == "50 min na bateria · 90% → 71%", "volta para a tomada com duracao e carga")
+    check(ev(.ajustesAplicados, 0) { $0.chaves = ["powernap", "naoexiste"] }.descricao == "Power Nap", "ajustes guardam chaves e traduzem na hora")
+    check(ev(.retomada, 0) { $0.abertas = 2; $0.total = 2 }.selo == "2 tarefas reabertas no Terminal"
+          && ev(.retomada, 0) { $0.abertas = 1; $0.total = 2 }.selo == "1 de 2 abertas" && ev(.retomada, 0).selo == nil, "selo da retomada")
+    check(ev(.travaLigada, 0) { $0.origem = .fora }.categoria == .trava && ev(.retomada, 0).categoria == .reinicios, "categorias")
+
+    let fim = em(600)
+    check(Fita.segmentos([], de: base, ate: fim, fonteAgora: .tomada) == [Segmento(base, fim, .desconhecido)], "sem diario = desconhecido, nunca palpite")
+    let dia = [ev(.appAbriu, 0), ev(.saiuDaTomada, 60), ev(.repousou, 90), ev(.despertou, 120), ev(.voltouATomada, 180)]
+    let f = Fita.segmentos(dia, de: base, ate: fim, fonteAgora: .tomada)
+    check(f.map { $0.faixa } == [.tomada, .bateria, .repouso, .bateria, .tomada], "tomada, bateria, repouso, bateria, tomada")
+    check(f.first?.inicio == base && f.last?.fim == fim, "a fita cobre a janela inteira")
+    let g = Fita.segmentos([ev(.saiuDaTomada, 100)], de: em(50), ate: fim, fonteAgora: .bateria)
+    check(g.map { $0.faixa } == [.desconhecido, .bateria], "antes do primeiro evento = desconhecido")
+    let queda = [ev(.appAbriu, 0), ev(.saiuDaTomada, 10), ev(.reinicioInesperado, 300) { $0.inicio = em(200); $0.fonte = .tomada }]
+    let h = Fita.segmentos(queda, de: base, ate: fim, fonteAgora: .tomada)
+    check(h.map { $0.faixa } == [.tomada, .bateria, .desligado, .tomada], "reinicio inesperado: desligado do ultimo sinal ate a partida")
+    check(h[2].inicio == em(200) && h[2].fim == em(300), "o desligado comeca no ultimo sinal")
+    let antes = Fita.segmentos([ev(.saiuDaTomada, -30), ev(.appAbriu, 20)], de: base, ate: fim, fonteAgora: .tomada)
+    check(antes.map { $0.faixa } == [.bateria], "estado anterior a janela vale no inicio")
+
+    check(Diario.podar([ev(.appAbriu, -60 * 24 * 31), ev(.appAbriu, 0)], agora: base).count == 1, "poda o que passou de 30 dias")
+    let url = FileManager.default.temporaryDirectory.appendingPathComponent("ns-verificar-\(getpid()).jsonl")
+    let d = Diario(url: url)
+    d.acrescentar(ev(.saiuDaTomada, 1) { $0.carga = 80 })
+    d.acrescentar(ev(.appAbriu, 0))
+    if let h = try? FileHandle(forWritingTo: url) { _ = try? h.seekToEnd(); try? h.write(contentsOf: Data("{lixo}\n".utf8)); try? h.close() }
+    let lidos = d.ler()
+    check(lidos.count == 2 && lidos.first?.tipo == .appAbriu && lidos.last?.carga == 80, "diario grava, ignora linha ruim e ordena")
+    check(Diario.repousoRecente([ev(.repousou, 0) { $0.porTampa = true }], agora: em(10), minutos: 15)?.porTampa == true, "repouso recente achado")
+    check(Diario.repousoRecente([ev(.repousou, 0)], agora: em(20), minutos: 15) == nil, "repouso antigo ignorado")
+    d.apagar()
+    check(d.ler().isEmpty, "apagar zera o historico")
+}
+
 print(falhas == 0 ? "\nTudo certo: nenhuma falha." : "\n\(falhas) falha(s).")
 exit(falhas == 0 ? 0 : 1)

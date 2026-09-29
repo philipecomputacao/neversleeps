@@ -80,4 +80,7 @@ public enum Amostras {
     public static let fileVaultLigado = "FileVault is On.\n"
     public static let fileVaultDesligado = "FileVault is Off.\n"
     public static let battSemBateria = "Now drawing from 'AC Power'\n"
+
+    /// `ioreg -r -k AppleClamshellState -d 1`, trecho real (29/09/2026).
+    public static let ioregTampaAberta = "+-o IOPMrootDomain  <class IOPMrootDomain>\n    {\n      \"AppleClamshellState\" = No\n      \"AppleClamshellCausesSleep\" = Yes\n    }\n"
 }
