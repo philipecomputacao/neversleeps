@@ -88,6 +88,16 @@ final class JanelaAjuda: NSObject {
             .paragrafo(t("Calor. Uma sessão do Claude Code é leve, o Mac passa o tempo esperando a rede. Compilação pesada ou testes em loop dentro de um bolso fechado não são. Nesses casos, mochila aberta.")),
             .paragrafo(t("Rede que cai por minutos. O Claude Code retenta quando a rede volta; uma queda longa pode derrubar a tarefa em andamento, e você retoma.")),
 
+            .secao(t("Se a energia cair")),
+            .paragrafo(t("Com a trava ligada, o Mac não repousa nem com a bateria no fim. Se a luz cair e a bateria acabar, ele desliga com tudo o que estava rodando. A janela “Falta de Energia…” cuida do que vem depois.")),
+            .passo(1, t("Ligar sozinho"),
+                   t("Num MacBook com chip Apple, o Mac desligado liga ao receber energia do carregador. É o padrão do macOS; a janela mostra e deixa mudar. Em Mac de mesa, o ajuste é “Iniciar Após Falta de Energia”, em Ajustes de Energia.")),
+            .passo(2, t("Passar do FileVault"),
+                   t("Com o FileVault ligado, o Mac para na tela de desbloqueio e só segue com a senha. No macOS 26, com o Acesso Remoto ligado, dá para desbloquear de outro aparelho na mesma rede: ssh usuario@nome-do-mac.local. Depois disso ele para na janela de login: entre por Compartilhamento de Tela.")),
+            .passo(3, t("Retomar"),
+                   t("Cadastre as pastas em que o Claude Code trabalha. Depois de um reinício inesperado, o app abre cada uma no Terminal com o comando escolhido, por padrão claude --continue. “Retomar Agora” prova que funciona.")),
+            .paragrafo(t("Como o app sabe que foi inesperado: desligar ou reiniciar pelo menu Apple encerra os apps, e ele vê. Queda de energia, travamento e o botão de ligar segurado não encerram ninguém. Se você encerrar o app antes, ele não estava lá para ver e não acusa nada.")),
+
             .secao(t("Ajustes de Energia")),
             .paragrafo(t("O macOS guarda um conjunto de ajustes para a tomada e outro para a bateria. A janela “Ajustes de Energia…” (⌘,) mostra os dois lado a lado. Mude quantos quiser e clique “Aplicar…”: uma única autenticação para tudo. Depois, a janela relê o sistema e marca em vermelho o que o macOS recusou.")),
             .paragrafo(t("“Restaurar Padrões de Energia…” devolve tudo ao padrão de fábrica, inclusive a trava.")),

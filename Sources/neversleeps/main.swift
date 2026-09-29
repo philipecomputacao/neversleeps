@@ -9,15 +9,18 @@
 //    Modelo.swift             ajustes, escritas, estado, catalogo
 //    Parser.swift             le a SAIDA do pmset (funcoes puras)
 //    Sistema.swift            executa o pmset e entrega o Estado
+//    Energia.swift            falta de energia: BootPreference, reinicio, tarefas
 //    Localizacao.swift        t() / tf(): chaves em pt-BR, traducao em Recursos/
 //  Sources/neversleeps/       o app
 //    main.swift               este arquivo: modos de linha de comando e partida
 //    Controlador.swift        icone, menu, orientacao de primeira vez
 //    Controlador+Teste.swift  o teste da tampa
+//    Controlador+Energia.swift  falta de energia: reinicio, relato, retomada
 //    Privilegio.swift         escrita como root pelo dialogo do macOS
 //    Prefs.swift              preferencias do app (nunca o estado do sistema)
 //    Dialogos.swift           alertas no idioma da Apple
 //    JanelaAjustes.swift      Ajustes de Energia (⌘,)
+//    JanelaEnergia.swift      Falta de Energia
 //    JanelaAjuda.swift        Ajuda (⇧⌘?)
 //    JanelaSobre.swift        Sobre
 //
@@ -31,7 +34,8 @@
 //
 //  MODOS DE LINHA DE COMANDO
 //  -------------------------
-//  neversleeps --estado               imprime o que o app le do sistema
+//  neversleeps --estado               imprime o que o app le do sistema,
+//                                     inclusive o modulo Falta de Energia
 //  neversleeps --repousos <minutos>   repousos do log nos ultimos N minutos
 //  neversleeps --registrar-login      poe o app nos Itens de Inicio de Sessao
 //  neversleeps --desregistrar-login   tira o app dos Itens de Inicio de Sessao
@@ -58,6 +62,19 @@ if CommandLine.arguments.contains("--estado") {
         let b = e.bateria[a.chave].map(String.init) ?? "-"
         if t == "-" && b == "-" { continue }
         print("  \(a.chave.padding(toLength: 16, withPad: " ", startingAt: 0)) \(t.padding(toLength: 7, withPad: " ", startingAt: 0)) \(b.padding(toLength: 8, withPad: " ", startingAt: 0)) \(a.titulo)")
+    }
+    print("")
+    print("falta de energia")
+    let sn = { (b: Bool?) in b.map { $0 ? "sim" : "nao" } ?? "NAO LI" }
+    let p = Sistema.lerPartida()
+    print("  carga da bateria:                 \(e.carga.map { "\($0)%" } ?? "sem bateria ou NAO LI")")
+    print("  liga ao conectar o carregador:    \(sn(p?.aoConectarCarregador))")
+    print("  liga ao abrir a tampa:            \(sn(p?.aoAbrirTampa))")
+    print("  FileVault:                        \(sn(Sistema.fileVaultLigado()))")
+    print("  Acesso Remoto (ssh):              \(sn(Sistema.acessoRemotoLigado()))")
+    print("  Compartilhamento de Tela:         \(sn(Sistema.compartilhamentoDeTelaLigado()))")
+    if let b = Sistema.partidaAtual() {
+        print("  partida atual (kern.boottime):    \(Date(timeIntervalSince1970: b))")
     }
     exit(0)
 }

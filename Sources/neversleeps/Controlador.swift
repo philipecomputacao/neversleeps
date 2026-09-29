@@ -13,6 +13,12 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var timer: Timer?
     lazy var janelaAjuda = JanelaAjuda()
     lazy var janelaSobre = JanelaSobre()
+    lazy var janelaEnergia: JanelaEnergia = {
+        let j = JanelaEnergia()
+        j.aoAplicar = { [weak self] in self?.recarregar() }
+        j.retomarAgora = { [weak self] tarefas in self?.abrirTarefas(tarefas) ?? [] }
+        return j
+    }()
     lazy var janelaAjustes: JanelaAjustes = {
         let j = JanelaAjustes()
         j.aoAplicar = { [weak self] in self?.recarregar() }
@@ -36,6 +42,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         // aqui sem abrir o menu. Timer + despertar, lendo so a trava (1 processo).
         timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
             self?.conferirTrava()
+            self?.sinal()
         }
         let nc = NSWorkspace.shared.notificationCenter
         nc.addObserver(self, selector: #selector(conferirTrava), name: NSWorkspace.didWakeNotification, object: nil)
@@ -49,11 +56,21 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         nc.addObserver(self, selector: #selector(despertouDoRepouso), name: NSWorkspace.didWakeNotification, object: nil)
 
         #if DEBUG
+        // `--simular-reinicio`: finge que a partida anterior acabou sem o app
+        // ver, para provar relato e retomada sem desligar o Mac da tomada.
+        if CommandLine.arguments.contains("--simular-reinicio") {
+            Prefs.partidaConhecida = 1
+            Prefs.encerradoNoBoot = nil
+        }
         // No diagnostico, nada de primeira vez: menu aberto e alerta modal
         // bloqueiam o run loop e o exit(0) nunca chega.
         if CommandLine.arguments.contains("--diagnostico-janelas")
             || CommandLine.arguments.contains("--capturar") { return }
         #endif
+
+        // Falta de Energia: reconhece um reinicio inesperado (e conta o que
+        // aconteceu) e passa a observar a fonte de energia.
+        iniciarEnergia()
 
         // Primeira abertura: registra no inicio da sessao (o item do menu e a
         // chave para desligar) e mostra onde o app mora, abrindo o proprio menu.
@@ -74,6 +91,10 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 self?.mostrarBoasVindas()
             }
         }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        fimVisto()
     }
 
     func menuWillOpen(_ menu: NSMenu) {
@@ -178,6 +199,8 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
                                simbolo: "slider.horizontal.3", acao: #selector(abrirAjustes))
         ajustes.keyEquivalent = ","
         menu.addItem(ajustes)
+        menu.addItem(itemMenu(t("Falta de Energia…"), resumoEnergia(),
+                              simbolo: "bolt.horizontal.circle", acao: #selector(abrirEnergia)))
 
         menu.addItem(.separator())
         montarRodape()
@@ -295,6 +318,20 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
 
     @objc func abrirAjustes() { janelaAjustes.mostrar() }
+    @objc func abrirEnergia() { janelaEnergia.mostrar() }
+
+    /// Legenda do item Falta de Energia: o que acontece se a luz cair agora.
+    private func resumoEnergia() -> String {
+        let liga: String
+        switch Sistema.lerPartida()?.aoConectarCarregador {
+        case true?:  liga = t("Liga sozinho com o carregador")
+        case false?: liga = t("Não liga sozinho")
+        case nil:    liga = ""
+        }
+        let n = Prefs.retomarLigado ? Prefs.tarefas.filter { $0.valida }.count : 0
+        let retoma = n == 0 ? t("sem retomada") : (n == 1 ? t("retoma 1 tarefa") : tf("retoma %d tarefas", n))
+        return liga.isEmpty ? retoma : liga + " · " + retoma
+    }
     @objc func mostrarAjuda() { janelaAjuda.mostrar() }
     @objc func mostrarSobre() { janelaSobre.mostrar() }
     @objc func sair() { NSApp.terminate(nil) }
@@ -302,10 +339,12 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func restaurarPadroes() {
         let (ok, _) = Dialogos.confirmar(
             t("Restaurar os padrões de energia do macOS?"),
-            t("Desfaz todas as alterações feitas aqui e pelo Terminal, inclusive a trava da tampa. Nada além da energia é afetado."),
+            t("Desfaz todas as alterações feitas aqui e pelo Terminal, inclusive a trava da tampa e o ligar sozinho. Nada além da energia é afetado."),
             botao: t("Restaurar"), destrutivo: true)
         guard ok else { return }
-        executarPrivilegiado("/usr/bin/pmset -a disablesleep 0 && /usr/bin/pmset restoredefaults",
+        // O BootPreference volta ao padrao da Apple (ligar com carregador e tampa).
+        // `|| true`: em Mac sem a variavel, o nvram -d nao pode derrubar o resto.
+        executarPrivilegiado("/usr/bin/pmset -a disablesleep 0 && /usr/bin/pmset restoredefaults && (/usr/sbin/nvram -d BootPreference || true)",
                              titulo: t("Restaurar Padrões de Energia")) { [self] in
             if estado.trava != false {
                 Dialogos.alerta(t("Não foi possível desligar a trava da tampa."),
@@ -394,6 +433,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
                 && w.windowNumber > 0 && w.windowNumber <= Int(UInt32.max)
         }
         janelaAjustes.mostrar()
+        janelaEnergia.mostrar()
         janelaSobre.mostrar()
         janelaAjuda.mostrar()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
@@ -436,6 +476,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     func diagnosticoJanelas() {
         janelaAjustes.mostrar()
+        janelaEnergia.mostrar()
         janelaAjuda.mostrar()
         janelaSobre.mostrar()
         for w in NSApp.windows {
