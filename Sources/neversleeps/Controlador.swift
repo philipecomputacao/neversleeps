@@ -488,6 +488,14 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         janelaHistorico.mostrar()
         janelaSobre.mostrar()
         janelaAjuda.mostrar()
+        // PNG em 2x: com um monitor externo 1x a janela abria nele e a captura
+        // saia borrada para telas Retina. Leva tudo para a tela Retina, se houver.
+        if let retina = NSScreen.screens.first(where: { $0.backingScaleFactor >= 2 }) {
+            let v = retina.visibleFrame
+            for w in NSApp.windows where capturavel(w) {
+                w.setFrameOrigin(NSPoint(x: v.midX - w.frame.width / 2, y: max(v.minY, v.midY - w.frame.height / 2)))
+            }
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
             for w in NSApp.windows.filter(capturavel) {
                 let nome = w.title.lowercased()
