@@ -10,6 +10,7 @@
 //    Parser.swift             le a SAIDA do pmset (funcoes puras)
 //    Sistema.swift            executa o pmset e entrega o Estado
 //    Energia.swift            falta de energia: BootPreference, reinicio, tarefas
+//    Registro.swift           Historico: eventos, diario em disco, fita
 //    Localizacao.swift        t() / tf(): chaves em pt-BR, traducao em Recursos/
 //  Sources/neversleeps/       o app
 //    main.swift               este arquivo: modos de linha de comando e partida
@@ -21,6 +22,8 @@
 //    Dialogos.swift           alertas no idioma da Apple
 //    JanelaAjustes.swift      Ajustes de Energia (⌘,)
 //    JanelaEnergia.swift      Falta de Energia
+//    JanelaHistorico.swift    Historico (⌘Y): fita das 24 h e acontecimentos
+//    Historico.swift          ponto unico de anotacao no diario
 //    JanelaAjuda.swift        Ajuda (⇧⌘?)
 //    JanelaSobre.swift        Sobre
 //
@@ -37,6 +40,7 @@
 //  neversleeps --estado               imprime o que o app le do sistema,
 //                                     inclusive o modulo Falta de Energia
 //  neversleeps --repousos <minutos>   repousos do log nos ultimos N minutos
+//  neversleeps --historico [n]        os ultimos n acontecimentos do Historico
 //  neversleeps --registrar-login      poe o app nos Itens de Inicio de Sessao
 //  neversleeps --desregistrar-login   tira o app dos Itens de Inicio de Sessao
 //  (binario em /Applications/neversleeps.app/Contents/MacOS/neversleeps)
@@ -87,6 +91,17 @@ if let i = CommandLine.arguments.firstIndex(of: "--repousos"),
     exit(0)
 }
 
+if let i = CommandLine.arguments.firstIndex(of: "--historico") {
+    // O diario do Historico, do mais recente para o mais antigo, em texto.
+    let n = (i + 1 < CommandLine.arguments.count ? Int(CommandLine.arguments[i + 1]) : nil) ?? 30
+    let f = DateFormatter()
+    f.setLocalizedDateFormatFromTemplate("ddMMyyyyHHmm")
+    let eventos = Historico.diario.ler()
+    print("historico: \(eventos.count) acontecimentos em \(Historico.diario.url.path)")
+    for e in eventos.suffix(n).reversed() { print("  " + e.linhaTexto(f)) }
+    exit(0)
+}
+
 if CommandLine.arguments.contains("--registrar-login") {
     // Usado pelo install.sh e pelo construir.sh logo apos instalar: registra o app
     // nos Itens de Inicio de Sessao e imprime o que o macOS respondeu.
@@ -127,6 +142,9 @@ let controlador = Controlador()
 app.delegate = controlador
 app.setActivationPolicy(.accessory)   // sem icone na Dock, sem janela principal
 #if DEBUG
+if CommandLine.arguments.contains("--historico-demo") { Historico.semearDemonstracao() }
+// `--escuro`: forca o modo escuro, para conferir as cores sem mudar o sistema.
+if CommandLine.arguments.contains("--escuro") { app.appearance = NSAppearance(named: .darkAqua) }
 if let i = CommandLine.arguments.firstIndex(of: "--capturar"), i + 1 < CommandLine.arguments.count {
     let pasta = CommandLine.arguments[i + 1]
     DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { controlador.capturarJanelas(em: pasta) }

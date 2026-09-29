@@ -98,6 +98,9 @@ final class JanelaAjuda: NSObject {
                    t("Cadastre as pastas em que o Claude Code trabalha. Depois de um reinício inesperado, o app abre cada uma no Terminal com o comando escolhido, por padrão claude --continue. “Retomar Agora” prova que funciona.")),
             .paragrafo(t("Como o app sabe que foi inesperado: desligar ou reiniciar pelo menu Apple encerra os apps, e ele vê. Queda de energia, travamento e o botão de ligar segurado não encerram ninguém. Se você encerrar o app antes, ele não estava lá para ver e não acusa nada.")),
 
+            .secao(t("Histórico")),
+            .paragrafo(t("“Histórico…” (⌘Y) mostra o que aconteceu com o Mac: a fita das últimas 24 horas (tomada, bateria, repouso, desligado) e cada acontecimento dos últimos 30 dias, com a hora e o motivo. Passe o mouse sobre a fita para ver de que hora a que hora. “Copiar” leva tudo em texto, bom para relatar um problema. Fica guardado só neste Mac.")),
+
             .secao(t("Ajustes de Energia")),
             .paragrafo(t("O macOS guarda um conjunto de ajustes para a tomada e outro para a bateria. A janela “Ajustes de Energia…” (⌘,) mostra os dois lado a lado. Mude quantos quiser e clique “Aplicar…”: uma única autenticação para tudo. Depois, a janela relê o sistema e marca em vermelho o que o macOS recusou.")),
             .paragrafo(t("“Restaurar Padrões de Energia…” devolve tudo ao padrão de fábrica, inclusive a trava.")),

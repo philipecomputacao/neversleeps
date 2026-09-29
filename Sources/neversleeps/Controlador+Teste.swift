@@ -75,10 +75,19 @@ extension Controlador {
         }
         // Congela a lacuna com o ultimo batimento antes de parar o timer.
         testeMaiorLacuna = max(testeMaiorLacuna, Date().timeIntervalSince(testeUltimoBatimento))
+        let lacuna = Int(testeMaiorLacuna)
         encerrarTeste()
 
-        let repousos = Sistema.repousosDesde(inicio)
-        let lacuna = Int(testeMaiorLacuna)
+        // O `pmset -g log` e a testemunha independente, e custa ~14 s de CPU
+        // (7 dias, 377 mil linhas). Fora da thread principal: o menu e as
+        // janelas continuam respondendo enquanto ele le.
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let repousos = Sistema.repousosDesde(inicio)
+            DispatchQueue.main.async { self?.concluirTeste(duracao: duracao, lacuna: lacuna, repousos: repousos) }
+        }
+    }
+
+    private func concluirTeste(duracao: Int, lacuna: Int, repousos: [Repouso]) {
         let parou = lacuna >= 30
 
         if repousos.isEmpty && !parou {
@@ -86,6 +95,7 @@ extension Controlador {
             Prefs.testeAprovadoDuracao = duracao
             Prefs.testeUltimaFalha = nil
             atualizarIcone()
+            Historico.anotar(.testeAprovado) { $0.duracao = duracao }
             Dialogos.alerta(t("Aprovado: o Mac não repousou."),
                             tf("Ficou %d min %d s fechado.\n\n• O log do sistema não registrou nenhum repouso nesse intervalo.\n• O batimento interno do app não parou (maior pausa: %d s).\n\nPode fechar e guardar: o Mac continua trabalhando.",
                                duracao / 60, duracao % 60, lacuna))
@@ -95,6 +105,7 @@ extension Controlador {
             if parou { motivo += (motivo.isEmpty ? "" : " ") + tf("O app ficou %d s sem conseguir rodar.", lacuna) }
             Prefs.testeAprovadoEm = nil
             Prefs.testeUltimaFalha = motivo
+            Historico.anotar(.testeReprovado) { $0.detalhe = motivo; $0.duracao = duracao }
             Dialogos.alerta(t("Reprovado: o Mac repousou com a tampa fechada."),
                             motivo + "\n\n" + t("A trava está marcada como ligada, mas não segurou. Confira no Terminal:\npmset -g | grep -i sleepdisabled\n\nSe aparecer 0, desligue e ligue a trava de novo aqui e repita o teste."))
         }

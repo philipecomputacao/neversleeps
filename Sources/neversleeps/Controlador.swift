@@ -11,12 +11,26 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     var estado = Estado()
     var ocupado = false
     var timer: Timer?
+    var desligando = false          // willPowerOff chegou: o fim do app nao e "encerrado"
     lazy var janelaAjuda = JanelaAjuda()
     lazy var janelaSobre = JanelaSobre()
     lazy var janelaEnergia: JanelaEnergia = {
         let j = JanelaEnergia()
         j.aoAplicar = { [weak self] in self?.recarregar() }
-        j.retomarAgora = { [weak self] tarefas in self?.abrirTarefas(tarefas) ?? [] }
+        j.retomarAgora = { [weak self] tarefas in
+            let falharam = self?.abrirTarefas(tarefas) ?? tarefas.map { $0.pasta }
+            Historico.anotar(.retomada) {
+                $0.origem = .menu
+                $0.abertas = tarefas.count - falharam.count
+                $0.total = tarefas.count
+            }
+            return falharam
+        }
+        return j
+    }()
+    lazy var janelaHistorico: JanelaHistorico = {
+        let j = JanelaHistorico()
+        j.fonteAgora = { Sistema.lerBateria().fonte }
         return j
     }()
     lazy var janelaAjustes: JanelaAjustes = {
@@ -51,6 +65,10 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         for nome in [NSWorkspace.didWakeNotification, NSWorkspace.screensDidWakeNotification] {
             nc.addObserver(self, selector: #selector(tampaAbriu), name: nome, object: nil)
         }
+        // Historico: repouso e despertar anotados na hora, com a tampa lida no
+        // ioreg (16 ms). Despertares de manutencao (DarkWake) nao chegam aqui.
+        nc.addObserver(self, selector: #selector(vaiRepousar), name: NSWorkspace.willSleepNotification, object: nil)
+        nc.addObserver(self, selector: #selector(despertou), name: NSWorkspace.didWakeNotification, object: nil)
         // Despertou depois de um repouso por tampa fechada com a trava desligada?
         // E o erro classico: instalar e achar que fechar ja funciona. Avisa na hora.
         nc.addObserver(self, selector: #selector(despertouDoRepouso), name: NSWorkspace.didWakeNotification, object: nil)
@@ -111,6 +129,10 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         guard !ocupado else { return }
         let nova = Sistema.lerTrava()
         if nova != estado.trava {
+            // Mudou sem passar pelo app: alguem usou o Terminal ou outro programa.
+            if let n = nova, estado.trava != nil {
+                Historico.anotar(n ? .travaLigada : .travaDesligada) { $0.origem = .fora }
+            }
             estado.trava = nova
             atualizarIcone()
         }
@@ -201,6 +223,10 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         menu.addItem(ajustes)
         menu.addItem(itemMenu(t("Falta de Energia…"), resumoEnergia(),
                               simbolo: "bolt.horizontal.circle", acao: #selector(abrirEnergia)))
+        let historico = itemMenu(t("Histórico…"), Historico.ultimo(),
+                                 simbolo: "clock.arrow.circlepath", acao: #selector(abrirHistorico))
+        historico.keyEquivalent = "y"
+        menu.addItem(historico)
 
         menu.addItem(.separator())
         montarRodape()
@@ -259,6 +285,9 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     /// ampulheta ANTES da chamada bloqueante.
     func aplicar(_ e: Escrita, titulo: String) {
         executarPrivilegiado(e.comando, titulo: titulo) { [self] in
+            if e.chave == Catalogo.chaveTrava, estado.confere(e), let ligada = estado.trava {
+                Historico.anotar(ligada ? .travaLigada : .travaDesligada) { $0.origem = .menu }
+            }
             if estado.confere(e), e.chave == Catalogo.chaveTrava, (e.tomada ?? 0) == 1,
                Prefs.testeAprovadoEm == nil, !Prefs.ofertaTesteVista {
                 Prefs.ofertaTesteVista = true
@@ -319,6 +348,20 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     @objc func abrirAjustes() { janelaAjustes.mostrar() }
     @objc func abrirEnergia() { janelaEnergia.mostrar() }
+    @objc func abrirHistorico() { janelaHistorico.mostrar() }
+
+    @objc func vaiRepousar() {
+        let tampa = Sistema.tampaFechada()
+        let trava = Sistema.lerTrava()
+        Historico.anotar(.repousou) { $0.porTampa = tampa; $0.trava = trava }
+    }
+
+    @objc func despertou() {
+        // O repouso que este despertar encerra: o ultimo repouso/despertar anotado.
+        let dormiu = Historico.diario.ler().last { $0.tipo == .repousou || $0.tipo == .despertou }
+            .flatMap { $0.tipo == .repousou ? $0.quando : nil }
+        Historico.anotar(.despertou) { e in e.duracao = dormiu.map { Int(Date().timeIntervalSince($0)) } }
+    }
 
     /// Legenda do item Falta de Energia: o que acontece se a luz cair agora.
     private func resumoEnergia() -> String {
@@ -344,8 +387,13 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         guard ok else { return }
         // O BootPreference volta ao padrao da Apple (ligar com carregador e tampa).
         // `|| true`: em Mac sem a variavel, o nvram -d nao pode derrubar o resto.
+        let travaAntes = estado.trava
         executarPrivilegiado("/usr/bin/pmset -a disablesleep 0 && /usr/bin/pmset restoredefaults && (/usr/sbin/nvram -d BootPreference || true)",
                              titulo: t("Restaurar Padrões de Energia")) { [self] in
+            Historico.anotar(.padroesRestaurados)
+            if travaAntes == true, estado.trava == false {
+                Historico.anotar(.travaDesligada) { $0.origem = .padroes }
+            }
             if estado.trava != false {
                 Dialogos.alerta(t("Não foi possível desligar a trava da tampa."),
                                 t("O macOS aceitou o comando, mas a trava continua ligada. O menu continua mostrando o valor real."))
@@ -392,11 +440,14 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
             guard let self = self else { return }
             self.recarregar()
             guard self.estado.trava == false else { return }
-            let recentes = Sistema.repousosDesde(Date().addingTimeInterval(-15 * 60))
-            guard let porTampa = recentes.last(where: { $0.motivo.contains("Clamshell") }) else { return }
+            // O diario anotou o repouso na hora, com a tampa lida no ioreg. Antes
+            // isto lia o `pmset -g log` inteiro: 14 s de CPU a cada despertar.
+            guard let repouso = Diario.repousoRecente(Historico.diario.ler(), agora: Date(), minutos: 15),
+                  repouso.porTampa == true, repouso.trava != true else { return }
+            let hora = DateFormatter.localizedString(from: repouso.quando, dateStyle: .none, timeStyle: .short)
             let (ligar, silenciar) = Dialogos.confirmar(
                 t("O Mac repousou ao fechar a tampa."),
-                tf("Registro do sistema: %@.\n\nA trava estava DESLIGADA, então nada do que estava rodando continuou. Se você fechou o Mac esperando que ele trabalhasse, esse é o motivo.\n\nLigar a trava agora? (um clique e uma autenticação)", porTampa.descricao),
+                tf("Repousou às %@, com a tampa fechada.\n\nA trava estava DESLIGADA, então nada do que estava rodando continuou. Se você fechou o Mac esperando que ele trabalhasse, esse é o motivo.\n\nLigar a trava agora? (um clique e uma autenticação)", hora),
                 botao: t("Ligar a Trava Agora"), destrutivo: false, comSupressao: true)
             if silenciar { Prefs.avisoRepousoSilenciado = true }
             guard ligar else { return }
@@ -434,6 +485,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
         }
         janelaAjustes.mostrar()
         janelaEnergia.mostrar()
+        janelaHistorico.mostrar()
         janelaSobre.mostrar()
         janelaAjuda.mostrar()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [self] in
@@ -477,6 +529,7 @@ final class Controlador: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func diagnosticoJanelas() {
         janelaAjustes.mostrar()
         janelaEnergia.mostrar()
+        janelaHistorico.mostrar()
         janelaAjuda.mostrar()
         janelaSobre.mostrar()
         for w in NSApp.windows {

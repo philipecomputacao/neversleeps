@@ -271,6 +271,11 @@ final class JanelaAjustes: NSObject, NSWindowDelegate {
         preencher()
         aoAplicar?()
 
+        let aplicados = lista.filter { estado.confere($0) }.map { $0.chave }
+        if !aplicados.isEmpty {
+            Historico.anotar(.ajustesAplicados) { $0.chaves = aplicados }
+        }
+
         if recusados.isEmpty {
             atualizarRodape(mensagem: lista.count == 1 ? t("Aplicado e conferido no sistema.")
                                                         : tf("%d alterações aplicadas e conferidas no sistema.", lista.count))

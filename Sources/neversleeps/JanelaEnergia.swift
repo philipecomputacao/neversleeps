@@ -356,6 +356,11 @@ final class JanelaEnergia: NSObject, NSWindowDelegate, NSTextFieldDelegate {
         case .ok:
             // Releitura obrigatoria: o que vale e o que a NVRAM diz agora.
             let lida = Sistema.lerPartida()
+            if let l = lida {
+                Historico.anotar(.partidaAlterada) {
+                    $0.aoCarregador = l.aoConectarCarregador; $0.aoAbrirTampa = l.aoAbrirTampa
+                }
+            }
             preencherPartida(mensagem: lida == nova ? t("Aplicado e conferido no sistema.")
                                                     : t("O macOS aceitou o comando, mas a NVRAM manteve o valor anterior. Os valores mostrados são os reais."))
             aoAplicar?()

@@ -23,22 +23,31 @@ extension Controlador {
     /// anterior e fechado com a hora de agora e a prova some.
     func iniciarEnergia() {
         avaliarPartida()
-        fonteMudou()
+        fonteMudou(anotar: false)     // a partida ja anotou a fonte; nao e "saiu da tomada"
 
         let ctx = Unmanaged.passUnretained(self).toOpaque()
         if let fonte = IOPSNotificationCreateRunLoopSource({ ctx in
             guard let ctx = ctx else { return }
-            Unmanaged<Controlador>.fromOpaque(ctx).takeUnretainedValue().fonteMudou()
+            Unmanaged<Controlador>.fromOpaque(ctx).takeUnretainedValue().fonteMudou(anotar: true)
         }, ctx)?.takeRetainedValue() {
             CFRunLoopAddSource(CFRunLoopGetMain(), fonte, .defaultMode)
         }
         NSWorkspace.shared.notificationCenter.addObserver(
-            self, selector: #selector(fimVisto), name: NSWorkspace.willPowerOffNotification, object: nil)
+            self, selector: #selector(macVaiDesligar), name: NSWorkspace.willPowerOffNotification, object: nil)
+    }
+
+    /// Desligar, reiniciar ou sair da sessao pelo menu Apple.
+    @objc func macVaiDesligar() {
+        guard !desligando else { return }
+        desligando = true
+        Prefs.encerradoNoBoot = Sistema.partidaAtual()
+        Historico.anotar(.desligou)
     }
 
     /// O app viu o proprio fim nesta partida: o proximo boot nao e surpresa.
-    @objc func fimVisto() {
+    func fimVisto() {
         Prefs.encerradoNoBoot = Sistema.partidaAtual()
+        if !desligando { Historico.anotar(.appEncerrado) }
     }
 
     /// Batimento, chamado pelo timer de 30 s.
@@ -47,7 +56,7 @@ extension Controlador {
     }
 
     /// IOKit avisa mudanca de fonte E de carga. Abre, atualiza ou fecha o periodo.
-    func fonteMudou() {
+    func fonteMudou(anotar: Bool) {
         let (fonte, carga) = Sistema.lerBateria()
         let agora = Date()
         var p = Prefs.periodoNaBateria
@@ -58,11 +67,21 @@ extension Controlador {
                 p = aberto
             } else {
                 p = PeriodoNaBateria(inicio: agora, bateriaInicio: carga)
+                if anotar {
+                    let trava = estado.trava
+                    Historico.anotar(.saiuDaTomada) { $0.carga = carga; $0.trava = trava }
+                }
             }
         case .tomada?:
             guard var aberto = p, aberto.fim == nil else { return }
             aberto.fim = agora
             p = aberto
+            if anotar {
+                Historico.anotar(.voltouATomada) {
+                    $0.carga = carga; $0.cargaInicial = aberto.bateriaInicio
+                    $0.duracao = Int(agora.timeIntervalSince(aberto.inicio))
+                }
+            }
         case nil:
             return
         }
@@ -85,9 +104,18 @@ extension Controlador {
             p.fim = p.ultimaLeitura
             Prefs.periodoNaBateria = p
         }
+        let religou = Date(timeIntervalSince1970: atual)
+        let fonte = Sistema.lerBateria().fonte
+        switch veredito {
+        case .mesmaPartida, .primeiraVez:
+            Historico.anotar(.appAbriu) { $0.fonte = fonte }
+        case .encerradoNormal:
+            var e = Evento(.macLigou, quando: religou); e.fonte = fonte; Historico.anotar(e)
+        case .inesperado:
+            break
+        }
         guard veredito == .inesperado else { return }
 
-        let religou = Date(timeIntervalSince1970: atual)
         let texto = relato(causa: Relato.causa(periodo), periodo: periodo,
                            ultimoSinal: ultimoSinal, religou: religou)
         Prefs.ultimoRelato = texto
@@ -98,6 +126,17 @@ extension Controlador {
         aguardarRede { [weak self] in
             guard let self = self else { return }
             let falharam = tarefas.isEmpty ? [] : self.abrirTarefas(tarefas)
+            // No Historico, o reinicio fica na hora em que o Mac religou, e o
+            // desligado da fita comeca no ultimo sinal de vida que o app viu.
+            var e = Evento(.reinicioInesperado, quando: religou)
+            e.fonte = fonte
+            e.inicio = [ultimoSinal, periodo?.ultimaLeitura].compactMap { $0 }.max()
+            e.detalhe = texto
+            if !tarefas.isEmpty {
+                e.abertas = tarefas.count - falharam.count
+                e.total = tarefas.count
+            }
+            Historico.anotar(e)
             self.mostrarRelato(texto, tarefas: tarefas.count, falharam: falharam)
         }
     }
