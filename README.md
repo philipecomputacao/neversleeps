@@ -61,6 +61,12 @@ The app knows the restart was unexpected because shutting down or restarting fro
 
 <p align="center"><img src="Recursos/capturas/en/power-failure.png" width="560" alt="Power Failure window: Start Up on Its Own, After Starting Up, Resume Work, What Happened"></p>
 
+## History
+
+**History…** (⌘Y) shows what happened to the Mac: a strip of the last 24 hours (power adapter, battery, sleep, off) and every event of the last 30 days, grouped by day, with the time and the reason. Went to sleep when the lid closed with the lock off? Unplugged at 01:14 at 100%? The Mac restarted without anyone asking and the tasks came back? It is there. **Copy** takes it all as text. It is kept only on this Mac, in a small file the app writes the moment things happen.
+
+<p align="center"><img src="Recursos/capturas/en/history.png" width="560" alt="History window: strip of the last 24 hours and events grouped by day"></p>
+
 ## What it does
 
 | I want to | Do this |
@@ -73,6 +79,7 @@ The app knows the restart was unexpected because shutting down or restarting fro
 <p align="center"><img src="Recursos/capturas/en/power-settings.png" width="640" alt="Power Settings window: power adapter and battery columns, Apply button"></p>
 | Start with the Mac | On by default since the first launch. **Open at Login** in the menu is the switch to turn it off |
 | Get back to work after a power failure | **Power Failure…**: starts up on its own, reports, and reopens your tasks in Terminal |
+| Know what happened while I was not looking | **History…** (⌘Y): the 24-hour strip and every event |
 | Undo everything | **Restore Power Defaults…** |
 
 ## Why not `caffeinate` or Amphetamine?

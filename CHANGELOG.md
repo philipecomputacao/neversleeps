@@ -13,7 +13,13 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/). Versioname
 - Diagnóstico do que acontece depois de ligar: FileVault, Acesso Remoto (desbloqueio por SSH no macOS 26) e Compartilhamento de Tela, com o comando `ssh` pronto para copiar.
 - Reinício inesperado: o app reconhece pela mudança do `kern.boottime` sem ter visto o próprio fim, e conta o que aconteceu (se a bateria acabou, desde quando o Mac estava na bateria, com quanta carga).
 - Retomada: pastas e comandos (por padrão `claude --continue`) reabertos no Terminal depois de um reinício inesperado, quando a rede volta. **Retomar Agora** prova que funciona.
-- `--estado` mostra o módulo Falta de Energia. Build de debug: `--simular-reinicio`.
+- Janela **Histórico…** (⌘Y): fita das últimas 24 horas (tomada, bateria, repouso, desligado, com a hora de cada trecho ao passar o mouse) e os acontecimentos dos últimos 30 dias agrupados por dia, com filtro, Copiar e Apagar. O item do menu mostra o último acontecimento.
+- O app anota na hora: saiu e voltou para a tomada, repousou (pela tampa ou não) e despertou, trava ligada ou desligada (pelo menu ou por fora), teste da tampa, Mac ligou ou desligou, reinício inesperado e retomada, ajustes aplicados. Arquivo `historico.jsonl` em Application Support, só neste Mac.
+- `--estado` mostra o módulo Falta de Energia; `--historico [n]` lista os últimos acontecimentos. Build de debug: `--simular-reinicio`, `--historico-demo`, `--escuro`.
+
+### Alterado
+- O aviso "o Mac repousou ao fechar a tampa" consulta o Histórico em vez de ler o `pmset -g log` inteiro, que custava 14 s de CPU a cada despertar.
+- O teste da tampa lê o `pmset -g log` fora da thread principal: menu e janelas não congelam enquanto ele confere.
 
 ## [1.0.2], 2026-09-12
 

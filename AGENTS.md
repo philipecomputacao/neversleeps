@@ -9,8 +9,8 @@ Swift Package (`swift build`, `swift run verificar`), sem Xcode. O `.app` é mon
 | Caminho | O que é |
 |---|---|
 | `Package.swift` | Dois alvos + testes. Tools 5.9 (modo Swift 5), macOS 14+ |
-| `Sources/NeversleepsCore/` | Núcleo sem AppKit, testável: `Modelo` (ajustes, escritas, estado, catálogo), `Parser` (lê a saída do pmset, nvram e fdesetup, funções puras), `Sistema` (executa os comandos), `Energia` (Falta de Energia: `PartidaAutomatica`, `Reinicio`, `PeriodoNaBateria`, `Tarefa`), `Localizacao` (`t()`/`tf()`), `Amostras` (saídas reais) |
-| `Sources/neversleeps/` | O app: `main` (linha de comando e partida), `Controlador` (ícone, menu, orientação de primeira vez), `Controlador+Teste` (teste da tampa), `Controlador+Energia` (reinício inesperado, relato, retomada), `Privilegio`, `Prefs`, `Dialogos`, `JanelaAjustes`, `JanelaEnergia`, `JanelaAjuda`, `JanelaSobre` |
+| `Sources/NeversleepsCore/` | Núcleo sem AppKit, testável: `Modelo` (ajustes, escritas, estado, catálogo), `Parser` (lê a saída do pmset, nvram, fdesetup e ioreg, funções puras), `Sistema` (executa os comandos), `Energia` (Falta de Energia: `PartidaAutomatica`, `Reinicio`, `PeriodoNaBateria`, `Tarefa`), `Registro` (Histórico: `Evento`, `Diario`, `Fita`), `Localizacao` (`t()`/`tf()`), `Amostras` (saídas reais) |
+| `Sources/neversleeps/` | O app: `main` (linha de comando e partida), `Controlador` (ícone, menu, orientação de primeira vez), `Controlador+Teste` (teste da tampa), `Controlador+Energia` (reinício inesperado, relato, retomada), `Historico` (anotar, símbolo e cor de cada evento), `Privilegio`, `Prefs`, `Dialogos`, `JanelaAjustes`, `JanelaEnergia`, `JanelaHistorico`, `JanelaAjuda`, `JanelaSobre` |
 | `Sources/verificar/` | As checagens do núcleo sem framework de teste. Portão do `construir.sh` |
 | `Tests/NeversleepsCoreTests/` | Swift Testing. Roda no CI (exige Xcode) |
 | `Recursos/` | `gerar-icone.swift`, `en.lproj/Localizable.strings` (chaves em pt-BR, tradução em inglês), `capturas/` (screenshots usados nos READMEs) |
@@ -61,6 +61,13 @@ Swift Package (`swift build`, `swift run verificar`), sem Xcode. O `.app` é mon
 28. **Avaliar a partida ANTES de registrar a fonte.** `iniciarEnergia()` chama `avaliarPartida()` e só depois `fonteMudou()`; na ordem inversa, o período na bateria da partida anterior é fechado com a hora de agora e a prova some.
 29. **Retomada abre `.command` no Terminal**, sem AppleScript: não pede permissão de Automação. O comando é texto livre do usuário e roda como ele; **nunca** passa pelo `Privilegio`. Arquivos em `~/Library/Application Support/neversleeps/retomar/`, recriados a cada retomada. O `~` da pasta é expandido pelo app, porque dentro de aspas simples o shell não expande. Prova sem desligar o Mac: build de debug com `--simular-reinicio`.
 30. **O build de debug fora do bundle usa o domínio `neversleeps` do `defaults`**, não `me.lpdigital.neversleeps`. Teste no debug não mexe nas preferências do app instalado.
+31. **`pmset -g log` custa 14 s de CPU** (7 dias, 377 mil linhas, 99% assertions e DarkWake); `log show` custa 13 s. Nunca na thread principal, nunca a cada despertar. Só o teste da tampa o lê (testemunha independente), em segundo plano. Todo o resto vem do diário do Histórico.
+32. **O Histórico é o diário do app** (`Registro.swift` + `Historico.swift`): `historico.jsonl` em Application Support, uma linha por evento, poda de 30 dias ou 1.000 eventos na partida. É história, não estado: menu e ícone continuam perguntando ao sistema. Todo evento novo entra por `Historico.anotar`, com título e descrição em `Evento` (localizados) e símbolo e cor em `Historico`.
+33. **Repouso é anotado no `willSleepNotification`**, com a tampa lida no `ioreg -r -k AppleClamshellState -d 1` (16 ms). DarkWake (manutenção, Power Nap) não chega ao app, então o Histórico não se enche de ruído.
+34. **Na partida, `fonteMudou(anotar: false)`**: a partida já anota a fonte (`appAbriu`/`macLigou`/`reinicioInesperado` levam `fonte`). Anotar "saiu da tomada" na abertura seria mentira.
+35. **Cores do Histórico só com `NSColor` do sistema em `NSBox`/`draw()`.** `layer.backgroundColor` com `cgColor` congela a cor e quebra o modo escuro. `NSBox` custom não tem tamanho intrínseco: conteúdo preso por constraints (o selo nasceu com altura zero).
+36. **Demonstração e capturas do Histórico nunca no diário real:** `NEVERSLEEPS_HISTORICO=<arquivo>` com `--historico-demo` (o demo recusa rodar sem a variável). Modo escuro nas capturas: `--escuro`.
+37. **Evento guarda dado, não frase.** Chaves do catálogo, booleanos e contagens; o título e a descrição são montados na hora de mostrar, no idioma de agora. Guardar texto traduzido congelava o idioma do dia da anotação (apareceu "Desligar a Tela Após" no app em inglês). A exceção é `detalhe`, narrativa pronta (relato do reinício, motivo do teste).
 
 ## Máquina de referência
 

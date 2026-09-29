@@ -61,6 +61,12 @@ O app sabe que o reinício foi inesperado porque desligar ou reiniciar pelo menu
 
 <p align="center"><img src="Recursos/capturas/pt-BR/falta-de-energia.png" width="560" alt="Janela Falta de Energia: Ligar Sozinho, Depois de Ligar, Retomar o Trabalho, O Que Aconteceu"></p>
 
+## Histórico
+
+**Histórico…** (⌘Y) mostra o que aconteceu com o Mac: uma fita das últimas 24 horas (tomada, bateria, repouso, desligado) e cada acontecimento dos últimos 30 dias, agrupado por dia, com a hora e o motivo. Repousou ao fechar a tampa com a trava desligada? Saiu da tomada às 01:14 com 100%? O Mac reiniciou sem ninguém mandar e as tarefas voltaram? Está lá. **Copiar** leva tudo em texto. Fica guardado só neste Mac, num arquivo pequeno que o app escreve na hora em que as coisas acontecem.
+
+<p align="center"><img src="Recursos/capturas/pt-BR/historico.png" width="560" alt="Janela Histórico: fita das últimas 24 horas e acontecimentos agrupados por dia"></p>
+
 ## O que ele faz
 
 | Quero | Faço |
@@ -73,6 +79,7 @@ O app sabe que o reinício foi inesperado porque desligar ou reiniciar pelo menu
 <p align="center"><img src="Recursos/capturas/pt-BR/ajustes.png" width="640" alt="Janela Ajustes de Energia: colunas Tomada e Bateria, botão Aplicar"></p>
 | Abrir junto com o Mac | Já vem ligado desde a primeira abertura. **Abrir no Início da Sessão** no menu é a chave para desligar |
 | Voltar a trabalhar depois de uma queda de energia | **Falta de Energia…**: liga sozinho, relata e reabre as tarefas no Terminal |
+| Saber o que aconteceu enquanto eu não olhava | **Histórico…** (⌘Y): fita das 24 horas e cada acontecimento |
 | Desfazer tudo | **Restaurar Padrões de Energia…** |
 
 ## Por que não `caffeinate` ou Amphetamine?
